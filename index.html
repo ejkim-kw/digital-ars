@@ -1,0 +1,2821 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>키움증권 디지털ARS 기획 문서</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css" />
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* ── Kiwoom 브랜드 컬러 (남색 액센트) ── */
+    --red: #003087;
+    --red-dark: #001F5B;
+    --red-light: #E8EEFA;
+    --red-muted: #EEF3FF;
+
+    /* ── 배경 / 서피스 ── */
+    --bg: #EFF2F9;
+    --surface: #FFFFFF;
+    --border: #DDE4F0;
+
+    /* ── 뉴트럴 (쿨 블루-그레이 계열) ── */
+    --gray-50: #EFF2F9;
+    --gray-100: #E4E9F4;
+    --gray-200: #CDD5E8;
+    --gray-400: #8896AD;
+    --gray-600: #4A5568;
+    --gray-700: #2D3748;
+    --gray-800: #0D1B3E;
+
+    /* ── 텍스트 ── */
+    --text: #0D1B3E;
+    --text-2: #4A5568;
+    --text-3: #8896AD;
+  }
+
+  body {
+    font-family: 'Pretendard', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  /* ── NAV ── */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff;
+    border-bottom: 3px solid var(--red);
+    box-shadow: 0 2px 12px rgba(13,27,62,.08);
+  }
+  .header-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 0 24px; display: flex; align-items: center; gap: 0;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 11px;
+    padding: 14px 28px 14px 0; flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    margin-right: 4px;
+  }
+  .logo-mark {
+    width: 36px; height: 36px; background: var(--red);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+  .logo-info { display: flex; flex-direction: column; gap: 2px; }
+  .logo-brand { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.1; }
+  .logo-sub { font-size: 11px; color: var(--text-3); line-height: 1; }
+  .tab-nav { display: flex; gap: 0; flex: 1; }
+  .tab-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 14px; font-weight: 500; color: var(--gray-600);
+    padding: 0 22px; height: 60px;
+    border-bottom: 3px solid transparent; margin-bottom: -3px;
+    transition: color .18s, border-color .18s;
+    white-space: nowrap; display: flex; align-items: center; gap: 8px;
+    font-family: inherit;
+  }
+  .tab-btn:hover { color: var(--red); }
+  .tab-btn.active { color: var(--red); border-bottom-color: var(--red); font-weight: 700; }
+  .tab-btn svg { width: 16px; height: 16px; stroke-width: 2; flex-shrink: 0; }
+  .header-meta {
+    margin-left: auto; font-size: 12px; color: var(--text-3);
+    white-space: nowrap; padding-left: 24px;
+    border-left: 1px solid var(--border);
+  }
+
+  /* ── CONTENT ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .content-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── MARKDOWN TYPOGRAPHY ── */
+  .md-body h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--red);
+    border-bottom: 3px solid var(--red);
+    padding-bottom: 12px;
+    margin-bottom: 32px;
+    margin-top: 0;
+  }
+  .md-body h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-top: 48px;
+    margin-bottom: 16px;
+    padding: 10px 16px;
+    background: var(--gray-100);
+    border-left: 4px solid var(--red);
+    border-radius: 0 6px 6px 0;
+  }
+  .md-body h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-top: 32px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .md-body h3::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: var(--red);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .md-body h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--red-dark);
+    margin-top: 24px;
+    margin-bottom: 10px;
+  }
+  .md-body p { margin-bottom: 12px; }
+  .md-body ul, .md-body ol {
+    padding-left: 24px;
+    margin-bottom: 12px;
+  }
+  .md-body li { margin-bottom: 4px; }
+  .md-body strong { color: var(--gray-800); font-weight: 700; }
+  .md-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* blockquote (❓ 미결정) */
+  .md-body blockquote {
+    background: #fff8e1;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    color: #78350f;
+    font-size: 14px;
+  }
+  .md-body blockquote p { margin: 0; }
+
+  /* Tables */
+  .md-body table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 16px 0 24px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  .md-body thead tr { background: var(--red); }
+  .md-body thead th {
+    color: #fff;
+    font-weight: 600;
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 13px;
+  }
+  .md-body tbody tr { border-bottom: 1px solid var(--border); }
+  .md-body tbody tr:nth-child(even) { background: var(--gray-50); }
+  .md-body tbody tr:last-child { border-bottom: none; }
+  .md-body tbody td {
+    padding: 10px 14px;
+    vertical-align: top;
+    font-size: 14px;
+  }
+  .md-body tbody td strong { color: var(--gray-600); font-weight: 600; }
+
+  /* Code blocks (wireframe ASCII) */
+  .md-body pre {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.3);
+  }
+  .md-body pre code {
+    font-family: 'D2Coding', 'Consolas', 'Courier New', monospace;
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+    white-space: pre;
+  }
+  .md-body code {
+    font-family: 'D2Coding', 'Consolas', monospace;
+    background: var(--gray-100);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: var(--red-dark);
+  }
+
+  /* Mermaid diagrams */
+  .mermaid {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 16px;
+    margin: 24px 0;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    overflow-x: auto;
+  }
+  .mermaid svg { max-width: 100%; }
+
+  /* ── SECTION BADGES ── */
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--red-light);
+    color: var(--red);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    letter-spacing: .3px;
+  }
+
+  /* ── INTRO CARD ── */
+  .intro-card {
+    background: linear-gradient(135deg, var(--red) 0%, #001F5B 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .intro-card h2 { color: #fff; background: none; border: none; padding: 0; margin: 0 0 8px; font-size: 22px; }
+  .intro-card p { opacity: .88; margin: 0; font-size: 14px; }
+  .intro-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+  .intro-meta span { font-size: 13px; opacity: .8; }
+  .intro-meta span strong { opacity: 1; font-weight: 700; }
+
+  /* ── LOADING SPINNER ── */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px;
+    color: var(--gray-400);
+    gap: 12px;
+    font-size: 14px;
+  }
+  .spinner {
+    width: 20px; height: 20px;
+    border: 2px solid var(--gray-200);
+    border-top-color: var(--red);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── WIRE SUB-TABS ── */
+  .wire-sub-nav {
+    display: flex; gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin: 0 0 32px;
+  }
+  .wire-sub-btn {
+    padding: 10px 22px; font-size: 14px; font-weight: 600;
+    color: var(--gray-400); background: none; border: none;
+    border-bottom: 3px solid transparent; cursor: pointer;
+    margin-bottom: -2px; transition: color .15s, border-color .15s;
+    font-family: inherit; display: flex; align-items: center; gap: 7px;
+  }
+  .wire-sub-btn svg { width: 15px; height: 15px; stroke-width: 2; flex-shrink: 0; }
+  .wire-sub-btn:hover { color: var(--gray-700); }
+  .wire-sub-btn.active { color: var(--red); border-bottom-color: var(--red); }
+
+  /* ── LUCIDE ICON SIZES IN MOCKUP SCREENS ── */
+  .ms-svc-icon svg, .ms-list-icon svg { width: 20px; height: 20px; color: #003087; stroke-width: 2; }
+  .ms-auth-icon svg { width: 22px; height: 22px; color: #003087; stroke-width: 2; }
+  .ms-check-circle svg { width: 34px; height: 34px; color: #16A34A; stroke-width: 2.5; }
+  .ms-upload-btn svg { width: 22px; height: 22px; color: #9CA3AF; }
+  .ms-file-icon svg { width: 22px; height: 22px; color: #003087; }
+  .ms-btn-primary svg, .ms-btn-outline svg { width: 15px; height: 15px; }
+  .ms-doc-note svg { width: 12px; height: 12px; color: #92400E; vertical-align: -2px; }
+  .ms-wait-badge svg { width: 13px; height: 13px; }
+  .ms-context-val svg { width: 15px; height: 15px; vertical-align: -2px; }
+  .ms-wide-card svg.arr { width: 18px; height: 18px; color: #D1D5DB; }
+  .ms-list-chevron svg { width: 16px; height: 16px; color: #D1D5DB; }
+  .admin-menu-item { padding: 9px 14px; font-size: 11px; color: #6B7280; cursor: pointer; display: flex; align-items: center; gap: 7px; }
+  .admin-menu-item svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .wire-sub-panel { display: none; }
+  .wire-sub-panel.active { display: block; }
+
+  /* BENCHMARKING COMPONENTS */
+  .benchmark-summary,
+  .benchmark-matrix-wrap,
+  .benchmark-roadmap,
+  .benchmark-gallery,
+  .benchmark-empty {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .benchmark-summary { padding: 24px; }
+  .benchmark-matrix-wrap { overflow-x: auto; }
+  .benchmark-matrix { width: 100%; min-width: 640px; border-collapse: collapse; }
+  .benchmark-matrix th,
+  .benchmark-matrix td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: left; }
+  .benchmark-matrix th { background: var(--red-light); color: var(--red-dark); font-size: 13px; }
+  .benchmark-matrix tr:last-child td { border-bottom: 0; }
+  .benchmark-insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .benchmark-roadmap { padding: 24px; }
+  .benchmark-section-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: var(--red); }
+  .benchmark-section-title { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .benchmark-insight-card-title { margin: -18px -18px 12px; padding: 14px 18px; border-bottom: 1px solid #F1CBCD; background: var(--red-light); color: var(--red-dark); font-size: 17px; font-weight: 800; border-radius: 11px 11px 0 0; }
+  .benchmark-point { display: block; margin: 10px 0; padding: 10px 12px; border-left: 3px solid var(--red); background: var(--red-muted); color: var(--text-1); border-radius: 0 8px 8px 0; }
+  .benchmark-point strong { color: var(--red-dark); }
+  .benchmark-roadmap-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .benchmark-roadmap-card { padding: 18px; border-radius: 10px; }
+  .benchmark-roadmap-stage + .benchmark-roadmap-stage { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(67, 102, 168, .2); }
+  .benchmark-roadmap-stage h4 { margin-bottom: 8px; font-size: 17px; font-weight: 800; }
+  .benchmark-roadmap-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin-top: 12px; list-style: none; }
+  .benchmark-roadmap-items li { padding: 10px 12px; background: rgba(255, 255, 255, .72); border: 1px solid rgba(194, 34, 43, .12); border-radius: 8px; font-size: 12px; color: var(--text-2); }
+  .benchmark-roadmap-items strong { display: block; margin-bottom: 3px; color: var(--text-1); font-size: 13px; }
+  .benchmark-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; padding: 20px; }
+  .benchmark-company-section { display: grid; gap: 14px; }
+  .benchmark-company-heading { display: flex; align-items: center; gap: 8px; font-size: 18px; }
+  .benchmark-shot { min-width: 0; }
+  .benchmark-phone { background: #15203B; border: 4px solid #15203B; border-radius: 24px; padding: 6px; box-shadow: 0 8px 20px rgba(13, 27, 62, .16); }
+  .benchmark-phone::before { content: ''; display: block; width: 38%; height: 4px; margin: 0 auto 6px; border-radius: 99px; background: #FFFFFF; opacity: .78; }
+  .benchmark-shot a { display: block; }
+  .benchmark-shot img { display: block; width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; border-radius: 15px; background: var(--gray-100); }
+  .benchmark-shot .benchmark-empty { min-height: 0; aspect-ratio: 9 / 16; padding: 16px; text-align: center; font-size: 12px; }
+  .benchmark-company-section[hidden],
+  .benchmark-shot a[hidden],
+  .benchmark-shot .benchmark-empty[hidden] { display: none; }
+  .benchmark-shot-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; color: var(--text-2); font-size: 11px; }
+  .benchmark-original-link { color: var(--red); font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .benchmark-company-analysis { padding: 16px 18px; border-left: 3px solid var(--red); background: var(--red-muted); border-radius: 0 10px 10px 0; color: var(--text-2); font-size: 13px; line-height: 1.65; }
+  .benchmark-company-filter { display: flex; flex-wrap: wrap; gap: 8px; }
+  .benchmark-company-filter button { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 7px 12px; cursor: pointer; font: inherit; }
+  .benchmark-company-filter button:hover,
+  .benchmark-company-filter button.active { background: var(--red-light); border-color: var(--red); color: var(--red); }
+  .benchmark-empty { min-height: 280px; display: grid; place-items: center; color: var(--text-3); }
+
+  @media (max-width: 1024px) {
+    .benchmark-insight-grid { grid-template-columns: repeat(2, 1fr); }
+    .benchmark-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .header-inner { flex-wrap: wrap; padding: 8px 12px 0; }
+    .logo { flex: 1 1 auto; border-right: 0; margin-right: 0; padding: 4px 0 8px; }
+    .header-meta { display: none; }
+    .tab-nav { order: 2; flex: 0 0 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .tab-btn { min-width: 0; height: 44px; padding: 0 3px; justify-content: center; font-size: 12px; gap: 0; overflow: hidden; }
+    .tab-btn svg { display: none; }
+    .benchmark-summary,
+    .benchmark-roadmap { padding: 18px; }
+    .benchmark-insight-grid,
+    .benchmark-gallery,
+    .benchmark-roadmap-grid { grid-template-columns: 1fr; }
+    .benchmark-roadmap-items { grid-template-columns: 1fr; }
+    .benchmark-section-title { font-size: 20px; }
+    .benchmark-matrix th,
+    .benchmark-matrix td { padding: 10px; }
+  }
+
+  /* ── MOCKUP GRID ── */
+  .mockup-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: center;
+    gap: 52px 28px;
+    padding: 36px 0 48px;
+  }
+  .mockup-pc-grid {
+    grid-template-columns: repeat(2, auto);
+    padding: 16px 0 64px;
+  }
+  .mockup-divider {
+    text-align: center; padding: 8px 0 0;
+    font-size: 11px; font-weight: 700; color: var(--gray-400);
+    letter-spacing: .8px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .mockup-divider::before, .mockup-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .mockup-item { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .mockup-label { font-size: 12px; font-weight: 600; color: var(--gray-400); text-align: center; }
+  .mockup-label strong { display: block; color: var(--gray-600); font-size: 13px; margin-bottom: 2px; }
+
+  /* ── PHONE FRAME ── */
+  .phone-wrap {
+    width: calc(390px * 0.72); height: calc(844px * 0.72);
+    position: relative;
+    filter: drop-shadow(0 16px 48px rgba(0,0,0,.26));
+  }
+  .phone-outer {
+    position: absolute; top: 0; left: 0;
+    width: 390px; height: 844px;
+    background: linear-gradient(165deg, #2e2e30 0%, #1a1a1c 100%);
+    border-radius: 50px; padding: 14px;
+    transform: scale(0.72); transform-origin: top left;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08), inset 0 0 0 1px rgba(255,255,255,.03);
+  }
+  .phone-outer::before {
+    content: ''; position: absolute; left: -3px; top: 130px;
+    width: 3px; height: 58px;
+    background: #3a3a3c; border-radius: 2px 0 0 2px;
+    box-shadow: 0 76px 0 #3a3a3c;
+  }
+  .phone-outer::after {
+    content: ''; position: absolute; right: -3px; top: 170px;
+    width: 3px; height: 84px;
+    background: #3a3a3c; border-radius: 0 2px 2px 0;
+  }
+  .phone-screen {
+    width: 100%; height: 100%; background: #F4F4F7;
+    border-radius: 38px; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+
+  /* ── MOCKUP UI COMPONENTS ── */
+  .ms-status {
+    height: 54px; display: flex; align-items: flex-end;
+    justify-content: space-between; padding: 0 24px 8px;
+    position: relative; flex-shrink: 0;
+  }
+  .ms-island {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 118px; height: 33px; background: #000; border-radius: 20px; z-index: 5;
+  }
+  .ms-time { font-size: 15px; font-weight: 700; }
+  .ms-sb-r { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+  .ms-header { background: #003087; padding: 0 16px 14px; flex-shrink: 0; }
+  .ms-header .ms-status { color: #fff; }
+  .ms-header-row { display: flex; align-items: center; justify-content: space-between; height: 44px; }
+  .ms-header-logo { display: flex; align-items: center; gap: 8px; }
+  .ms-logo-k {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: rgba(255,255,255,.22);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 15px; color: #fff;
+  }
+  .ms-logo-name { font-size: 16px; font-weight: 700; color: #fff; }
+  .ms-close-btn {
+    width: 30px; height: 30px; border: none;
+    background: rgba(255,255,255,.18); border-radius: 50%;
+    color: #fff; font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ms-back-btn {
+    background: none; border: none; cursor: pointer;
+    color: #fff; font-size: 24px; padding: 0; line-height: 1;
+    width: 30px; text-align: center;
+  }
+  .ms-header-center { flex: 1; text-align: center; }
+  .ms-header-title { font-size: 17px; font-weight: 700; color: #fff; }
+  .ms-greeting {
+    background: #fff; padding: 10px 18px;
+    font-size: 13px; color: #555;
+    border-bottom: 1px solid #F0F0F5; flex-shrink: 0;
+  }
+  .ms-greeting strong { color: #111; font-weight: 700; }
+  .ms-tabbar {
+    background: #fff; border-bottom: 1px solid #E5E7EB;
+    display: flex; overflow: hidden; flex-shrink: 0;
+  }
+  .ms-tab {
+    padding: 0 13px; height: 44px;
+    display: flex; align-items: center;
+    font-size: 12px; font-weight: 500; color: #9CA3AF;
+    border-bottom: 2px solid transparent; flex-shrink: 0; white-space: nowrap;
+  }
+  .ms-tab.sel { color: #003087; font-weight: 700; border-bottom-color: #003087; }
+  .ms-body { flex: 1; overflow: hidden; background: #F4F4F7; display: flex; flex-direction: column; }
+  .ms-section-label { font-size: 11px; font-weight: 700; color: #9CA3AF; padding: 12px 18px 6px; letter-spacing: .4px; }
+  .ms-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 14px 10px; }
+  .ms-svc-card {
+    background: #fff; border-radius: 14px; padding: 14px 12px;
+    display: flex; flex-direction: column; gap: 9px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .ms-svc-icon {
+    width: 38px; height: 38px; background: #E8EEFA; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+  }
+  .ms-svc-name { font-size: 12px; font-weight: 600; color: #111; line-height: 1.4; }
+  .ms-wide-card {
+    background: #fff; border-radius: 14px; margin: 0 14px; padding: 13px 14px;
+    display: flex; align-items: center; gap: 11px; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .ms-wide-card .ms-svc-name { flex: 1; font-size: 13px; }
+  .ms-arrow { font-size: 20px; color: #D1D5DB; }
+  .ms-list {
+    background: #fff; margin: 0 14px; border-radius: 14px;
+    overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .ms-list-item { display: flex; align-items: center; gap: 11px; padding: 14px; border-bottom: 1px solid #F3F4F6; }
+  .ms-list-item:last-child { border-bottom: none; }
+  .ms-list-icon {
+    width: 36px; height: 36px; border-radius: 10px; background: #E8EEFA;
+    display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;
+  }
+  .ms-list-text { flex: 1; }
+  .ms-list-main { font-size: 13px; font-weight: 600; color: #111; }
+  .ms-list-sub { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+  .ms-list-chevron { color: #D1D5DB; font-size: 18px; }
+  .ms-bottom {
+    background: #fff; border-top: 1px solid #F0F0F5;
+    padding: 10px 14px 14px; display: flex; gap: 10px; flex-shrink: 0;
+  }
+  .ms-btn-primary {
+    flex: 1; height: 46px; background: #003087; color: #fff;
+    border: none; border-radius: 12px; font-size: 14px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; font-family: inherit;
+  }
+  .ms-btn-outline {
+    flex: 1; height: 46px; background: #fff; color: #374151;
+    border: 1px solid #E5E7EB; border-radius: 12px; font-size: 14px; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; font-family: inherit;
+  }
+  .ms-auth-list { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
+  .ms-auth-card {
+    background: #fff; border: 1.5px solid #E5E7EB; border-radius: 14px; padding: 14px;
+    display: flex; align-items: center; gap: 13px; position: relative; cursor: pointer;
+  }
+  .ms-auth-card.sel { border-color: #003087; background: #EEF3FF; }
+  .ms-auth-icon {
+    width: 42px; height: 42px; border-radius: 13px; background: #E8EEFA;
+    display: flex; align-items: center; justify-content: center; font-size: 21px; flex-shrink: 0;
+  }
+  .ms-auth-main { font-size: 13px; font-weight: 700; color: #111; }
+  .ms-auth-sub { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+  .ms-badge-rec {
+    position: absolute; top: -1px; right: 14px; background: #003087; color: #fff;
+    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 0 0 8px 8px;
+  }
+  .ms-otp-row { display: flex; gap: 7px; padding: 0 20px; justify-content: center; }
+  .ms-otp-box {
+    flex: 1; height: 50px; background: #F9FAFB;
+    border: 1.5px solid #E5E7EB; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: #111;
+  }
+  .ms-otp-box.filled { border-color: #003087; background: #EEF3FF; }
+  .ms-otp-box.active { border-color: #003087; box-shadow: 0 0 0 2px rgba(0,48,135,.18); }
+  .ms-timer { text-align: center; font-size: 13px; color: #003087; font-weight: 600; padding: 8px 0; }
+  .ms-field { padding: 0 18px 12px; }
+  .ms-field-label { font-size: 11px; color: #6B7280; font-weight: 600; margin-bottom: 5px; }
+  .ms-field-val {
+    height: 46px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px;
+    padding: 0 13px; display: flex; align-items: center; font-size: 14px; color: #9CA3AF;
+  }
+  .ms-success-area {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    padding: 38px 24px 14px; gap: 11px;
+  }
+  .ms-check-circle {
+    width: 68px; height: 68px; background: #DCFCE7; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 32px;
+  }
+  .ms-success-title { font-size: 17px; font-weight: 700; color: #111; text-align: center; }
+  .ms-success-sub { font-size: 13px; color: #6B7280; text-align: center; line-height: 1.6; }
+  .ms-info-card {
+    background: #F9FAFB; border-radius: 12px; margin: 0 16px; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .ms-info-row { display: flex; justify-content: space-between; align-items: center; }
+  .ms-info-key { font-size: 12px; color: #9CA3AF; }
+  .ms-info-val { font-size: 12px; font-weight: 600; color: #111; }
+  .ms-progress-steps {
+    display: flex; align-items: center; padding: 12px 18px;
+    background: #fff; border-bottom: 1px solid #F0F0F5; flex-shrink: 0;
+  }
+  .ms-step { flex: 1; display: flex; align-items: center; gap: 5px; }
+  .ms-step-num {
+    width: 22px; height: 22px; border-radius: 50%; background: #E5E7EB; color: #9CA3AF;
+    font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .ms-step.done .ms-step-num { background: #22C55E; color: #fff; font-size: 12px; }
+  .ms-step.active .ms-step-num { background: #003087; color: #fff; }
+  .ms-step-label { font-size: 10px; color: #9CA3AF; }
+  .ms-step.active .ms-step-label { color: #003087; font-weight: 600; }
+  .ms-step.done .ms-step-label { color: #22C55E; }
+  .ms-step-line { width: 18px; height: 1px; background: #E5E7EB; flex-shrink: 0; margin: 0 2px; }
+  .ms-radio-list {
+    background: #fff; border-radius: 14px; margin: 0 14px;
+    overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .ms-radio-item { display: flex; align-items: center; gap: 13px; padding: 14px; border-bottom: 1px solid #F3F4F6; cursor: pointer; }
+  .ms-radio-item:last-child { border-bottom: none; }
+  .ms-radio-dot {
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid #D1D5DB; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ms-radio-item.sel .ms-radio-dot { border-color: #003087; background: #003087; }
+  .ms-radio-dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: transparent; }
+  .ms-radio-item.sel .ms-radio-dot::after { background: #fff; }
+  .ms-radio-text { font-size: 13px; font-weight: 600; color: #111; }
+  .ms-radio-sub { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+  .ms-upload-btns { display: flex; gap: 10px; padding: 12px 14px; }
+  .ms-upload-btn {
+    flex: 1; height: 76px; border: 1.5px dashed #D1D5DB; border-radius: 12px;
+    background: #fff; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px;
+    font-size: 11px; color: #6B7280; cursor: pointer;
+  }
+  .ms-upload-btn span { font-size: 22px; }
+  .ms-file-item {
+    background: #fff; border-radius: 10px; margin: 0 14px 8px; padding: 11px 13px;
+    display: flex; align-items: center; gap: 11px; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .ms-file-icon { font-size: 22px; }
+  .ms-file-info { flex: 1; }
+  .ms-file-name { font-size: 12px; font-weight: 600; color: #111; }
+  .ms-file-size { font-size: 10px; color: #9CA3AF; margin-top: 2px; }
+  .ms-file-ok { color: #22C55E; font-size: 15px; font-weight: 700; }
+  .ms-doc-note {
+    margin: 0 14px; padding: 9px 11px;
+    background: #FFF9EC; border: 1px solid #FCD34D; border-radius: 9px;
+    font-size: 10px; color: #78350F; line-height: 1.5;
+  }
+  .ms-context-card {
+    background: #fff; border-radius: 13px; margin: 12px 14px 0; padding: 13px 15px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.07);
+  }
+  .ms-context-title { font-size: 10px; color: #9CA3AF; margin-bottom: 4px; font-weight: 600; }
+  .ms-context-val { font-size: 13px; font-weight: 600; color: #111; }
+  .ms-wait-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #FFF3CD; border: 1px solid #FCD34D; border-radius: 20px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600; color: #92400E;
+  }
+  .ms-spacer { height: 12px; flex-shrink: 0; }
+  .ms-spacer-sm { height: 6px; flex-shrink: 0; }
+
+  /* ── PC BROWSER FRAME ── */
+  .browser-wrap {
+    width: calc(580px * 0.72); height: calc(440px * 0.72);
+    position: relative; filter: drop-shadow(0 12px 32px rgba(0,0,0,.2));
+  }
+  .browser-outer {
+    position: absolute; top: 0; left: 0;
+    width: 580px; height: 440px; background: #1c1c1e; border-radius: 10px;
+    overflow: hidden; transform: scale(0.72); transform-origin: top left;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .browser-bar {
+    height: 38px; background: #2c2c2e; display: flex; align-items: center;
+    padding: 0 10px; gap: 7px; flex-shrink: 0;
+  }
+  .browser-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .browser-url {
+    flex: 1; height: 20px; background: #3a3a3c; border-radius: 5px; margin: 0 8px;
+    display: flex; align-items: center; padding: 0 7px; font-size: 10px; color: #8e8e93;
+  }
+  .browser-content { background: #F5F5F7; height: calc(100% - 38px); display: flex; flex-direction: column; overflow: hidden; }
+  .admin-header {
+    background: #003087; padding: 0 18px; height: 48px;
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  }
+  .admin-logo { font-size: 14px; font-weight: 700; color: #fff; }
+  .admin-user { font-size: 11px; color: rgba(255,255,255,.8); }
+  .admin-body { display: flex; flex: 1; overflow: hidden; }
+  .admin-sidebar { width: 148px; background: #fff; border-right: 1px solid #E5E7EB; padding: 10px 0; flex-shrink: 0; }
+  .admin-menu-item { padding: 9px 14px; font-size: 11px; color: #6B7280; cursor: pointer; }
+  .admin-menu-item.sel { color: #003087; background: #EEF3FF; font-weight: 700; }
+  .admin-main { flex: 1; padding: 14px; overflow: hidden; }
+  .admin-section-title { font-size: 13px; font-weight: 700; color: #111; margin-bottom: 10px; }
+  .admin-toolbar { display: flex; gap: 7px; margin-bottom: 10px; }
+  .admin-btn {
+    height: 28px; padding: 0 10px; border-radius: 5px; font-size: 11px; font-weight: 600;
+    cursor: pointer; border: none; display: flex; align-items: center; gap: 3px;
+  }
+  .admin-btn-primary { background: #003087; color: #fff; }
+  .admin-btn-outline { background: #fff !important; color: #374151 !important; border: 1px solid #E5E7EB !important; }
+  .admin-table {
+    width: 100%; border-collapse: collapse; font-size: 11px; background: #fff;
+    border-radius: 7px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.07);
+  }
+  .admin-table th { background: #F9FAFB; padding: 7px 9px; text-align: left; color: #6B7280; font-weight: 600; border-bottom: 1px solid #E5E7EB; }
+  .admin-table td { padding: 7px 9px; border-bottom: 1px solid #F3F4F6; color: #111; }
+  .admin-table tr:last-child td { border-bottom: none; }
+  .admin-tag { display: inline-block; padding: 2px 7px; border-radius: 20px; font-size: 10px; font-weight: 600; }
+  .tag-on { background: #DCFCE7; color: #166534; }
+  .tag-off { background: #F3F4F6; color: #6B7280; }
+  .admin-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .admin-stat-card { background: #fff; border-radius: 7px; padding: 10px 11px; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
+  .admin-stat-label { font-size: 10px; color: #9CA3AF; margin-bottom: 3px; }
+  .admin-stat-val { font-size: 18px; font-weight: 700; color: #111; }
+  .admin-stat-up { font-size: 10px; color: #16A34A; margin-top: 2px; }
+  .admin-stat-dn { font-size: 10px; color: var(--red); margin-top: 2px; }
+  .admin-chart-box { background: #fff; border-radius: 7px; padding: 10px 11px; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
+  .admin-chart-title { font-size: 11px; font-weight: 600; color: #374151; margin-bottom: 7px; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 5px; height: 64px; }
+  .chart-bar { flex: 1; background: #003087; border-radius: 3px 3px 0 0; opacity: .6; }
+  .chart-bar:last-child { opacity: 1; }
+  .chart-labels { display: flex; gap: 5px; margin-top: 3px; }
+  .chart-label { flex: 1; font-size: 8px; color: #9CA3AF; text-align: center; }
+
+  /* ── PRINT ── */
+  @media print {
+    .site-header { position: static; }
+    .tab-panel { display: block !important; page-break-before: always; }
+    .tab-panel:first-of-type { page-break-before: auto; }
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 0; height: 3px;
+    background: var(--red);
+    z-index: 200;
+    transition: width .1s;
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">K</div>
+      <div class="logo-info">
+        <span class="logo-brand">키움증권</span>
+        <span class="logo-sub">디지털ARS 기획 문서</span>
+      </div>
+    </div>
+    <nav class="tab-nav" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('spec')" id="btn-spec" role="tab" aria-selected="true">
+        <i data-lucide="file-text"></i>기능명세서
+      </button>
+      <button class="tab-btn" onclick="switchTab('flow')" id="btn-flow" role="tab" aria-selected="false">
+        <i data-lucide="git-branch"></i>유저플로우
+      </button>
+      <button class="tab-btn" onclick="switchTab('wire')" id="btn-wire" role="tab" aria-selected="false">
+        <i data-lucide="layout-template"></i>와이어프레임
+      </button>
+      <button class="tab-btn" onclick="switchTab('benchmark')" id="btn-benchmark" role="tab" aria-selected="false">
+        <i data-lucide="scan-search"></i>벤치마킹
+      </button>
+    </nav>
+    <div class="header-meta">v0.1 · 2026.08 착수보고 기준</div>
+  </div>
+</header>
+
+<noscript>
+  <style>
+    main > .tab-panel:not(#panel-benchmark) { display: none !important; }
+    #panel-benchmark { display: block !important; }
+  </style>
+  <p style="margin:16px;">JavaScript를 사용할 수 없어 벤치마킹 탭을 바로 표시합니다.</p>
+</noscript>
+
+<main>
+  <!-- 기능명세서 -->
+  <div class="tab-panel active" id="panel-spec" role="tabpanel">
+    <div class="content-wrap">
+      <div class="intro-card">
+        <h2>기능명세서</h2>
+        <p>키움증권 디지털ARS 구축 프로젝트의 기능 요구사항 및 비기능 요구사항 명세</p>
+        <div class="intro-meta">
+          <span><strong>R 영역</strong> 8개</span>
+          <span><strong>F 기능</strong> 28개</span>
+          <span><strong>수행사</strong> ECS텔레콤</span>
+          <span><strong>기간</strong> 2026.08 ~ 2027.03</span>
+        </div>
+      </div>
+      <div class="loading" id="loading-spec"><div class="spinner"></div>문서를 불러오는 중...</div>
+      <div class="md-body" id="content-spec"></div>
+    </div>
+  </div>
+
+  <!-- 유저플로우 -->
+  <div class="tab-panel" id="panel-flow" role="tabpanel">
+    <div class="content-wrap">
+      <div class="intro-card">
+        <h2>유저플로우</h2>
+        <p>주요 서비스 시나리오별 사용자 흐름 다이어그램 (Mermaid Flowchart)</p>
+        <div class="intro-meta">
+          <span><strong>플로우</strong> 7개</span>
+          <span><strong>진입 경로</strong> 런처 팝업 / 알림톡 링크</span>
+        </div>
+      </div>
+      <div class="loading" id="loading-flow"><div class="spinner"></div>다이어그램을 불러오는 중...</div>
+      <div class="md-body" id="content-flow"></div>
+    </div>
+  </div>
+
+  <!-- 와이어프레임 -->
+  <div class="tab-panel" id="panel-wire" role="tabpanel">
+    <div class="content-wrap" style="padding-bottom:0">
+      <div class="intro-card">
+        <h2>와이어프레임 &amp; 시안</h2>
+        <p>텍스트 명세 및 실제 모바일 UI 목업 시안 (WF-01 ~ WF-11)</p>
+        <div class="intro-meta">
+          <span><strong>화면</strong> 11개</span>
+          <span><strong>모바일</strong> 390px 기준</span>
+          <span><strong>관리자</strong> PC Web 포함</span>
+        </div>
+      </div>
+      <div class="wire-sub-nav">
+        <button class="wire-sub-btn active" id="wsub-spec" onclick="switchWireTab('spec')"><i data-lucide="file-text"></i>명세</button>
+        <button class="wire-sub-btn" id="wsub-mockup" onclick="switchWireTab('mockup')"><i data-lucide="smartphone"></i>시안</button>
+      </div>
+    </div>
+
+    <!-- 명세 sub-panel -->
+    <div class="wire-sub-panel active" id="wpanel-spec">
+      <div class="content-wrap" style="padding-top:0">
+        <div class="loading" id="loading-wire"><div class="spinner"></div>화면 명세를 불러오는 중...</div>
+        <div class="md-body" id="content-wire"></div>
+      </div>
+    </div>
+
+    <!-- 시안 sub-panel -->
+    <div class="wire-sub-panel" id="wpanel-mockup">
+      <div class="content-wrap" style="padding-top:8px">
+
+        <!-- ── 모바일 화면 WF-01 ~ WF-09 ── -->
+        <div class="mockup-grid">
+
+          <!-- WF-01: 메인 화면 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <div class="ms-header-logo"><div class="ms-logo-k">K</div><span class="ms-logo-name">키움 디지털ARS</span></div>
+                  <button class="ms-close-btn">✕</button>
+                </div>
+              </div>
+              <div class="ms-greeting">안녕하세요, <strong>홍길동</strong> 고객님</div>
+              <div class="ms-tabbar">
+                <div class="ms-tab sel">셀프</div>
+                <div class="ms-tab">MTS/HTS</div>
+                <div class="ms-tab">ID/PW</div>
+                <div class="ms-tab">비대면</div>
+                <div class="ms-tab">계좌</div>
+              </div>
+              <div class="ms-body">
+                <div class="ms-section-label">자주 찾는 서비스</div>
+                <div class="ms-card-grid">
+                  <div class="ms-svc-card"><div class="ms-svc-icon"><i data-lucide="credit-card" width="20" height="20" color="#003087"></i></div><div class="ms-svc-name">입출금<br>안돼요</div></div>
+                  <div class="ms-svc-card"><div class="ms-svc-icon"><i data-lucide="key-round" width="20" height="20" color="#003087"></i></div><div class="ms-svc-name">비밀번호<br>모르겠어요</div></div>
+                  <div class="ms-svc-card"><div class="ms-svc-icon"><i data-lucide="file" width="20" height="20" color="#003087"></i></div><div class="ms-svc-name">서류 발급<br>현황 조회</div></div>
+                  <div class="ms-svc-card"><div class="ms-svc-icon"><i data-lucide="clipboard-list" width="20" height="20" color="#003087"></i></div><div class="ms-svc-name">ISA 가입<br>서류 제출</div></div>
+                </div>
+                <div class="ms-spacer-sm"></div>
+                <div class="ms-wide-card">
+                  <div class="ms-svc-icon" style="background:#EEF2FF"><i data-lucide="bar-chart-3" width="20" height="20" color="#4F46E5"></i></div>
+                  <div class="ms-svc-name">비대면 접수현황 조회</div>
+                  <div class="ms-arrow"><i data-lucide="chevron-right" width="18" height="18" color="#D1D5DB"></i></div>
+                </div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-outline"><i data-lucide="phone" width="14" height="14"></i>상담사</button>
+                <button class="ms-btn-primary"><i data-lucide="message-circle" width="14" height="14"></i>챗봇</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-01</strong>디지털ARS 메인</div>
+          </div>
+
+          <!-- WF-02: ID/PW 탭 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <div class="ms-header-logo"><div class="ms-logo-k">K</div><span class="ms-logo-name">키움 디지털ARS</span></div>
+                  <button class="ms-close-btn">✕</button>
+                </div>
+              </div>
+              <div class="ms-tabbar">
+                <div class="ms-tab">★ 셀프</div>
+                <div class="ms-tab">MTS/HTS</div>
+                <div class="ms-tab sel">ID/PW</div>
+                <div class="ms-tab">비대면</div>
+                <div class="ms-tab">계좌</div>
+              </div>
+              <div class="ms-body">
+                <div class="ms-spacer"></div>
+                <div class="ms-list">
+                  <div class="ms-list-item">
+                    <div class="ms-list-icon"><i data-lucide="badge" width="20" height="20" color="#003087"></i></div>
+                    <div class="ms-list-text"><div class="ms-list-main">ID조회 / PW초기화</div><div class="ms-list-sub">본인인증 후 처리</div></div>
+                    <div class="ms-list-chevron"><i data-lucide="chevron-right" width="16" height="16" color="#D1D5DB"></i></div>
+                  </div>
+                  <div class="ms-list-item">
+                    <div class="ms-list-icon"><i data-lucide="user-x" width="20" height="20" color="#003087"></i></div>
+                    <div class="ms-list-text"><div class="ms-list-main">장기미사용 ID 제한해지</div><div class="ms-list-sub">영웅문S# 앱 연동</div></div>
+                    <div class="ms-list-chevron"><i data-lucide="chevron-right" width="16" height="16" color="#D1D5DB"></i></div>
+                  </div>
+                  <div class="ms-list-item">
+                    <div class="ms-list-icon"><i data-lucide="shield-check" width="20" height="20" color="#003087"></i></div>
+                    <div class="ms-list-text"><div class="ms-list-main">간편인증 / 공동인증서</div><div class="ms-list-sub">안내 · FAQ</div></div>
+                    <div class="ms-list-chevron"><i data-lucide="chevron-right" width="16" height="16" color="#D1D5DB"></i></div>
+                  </div>
+                </div>
+                <div class="ms-spacer"></div>
+                <div style="padding:0 14px">
+                  <div style="background:#F0F9FF;border:1px solid #BAE6FD;border-radius:10px;padding:10px 12px;font-size:11px;color:#075985;line-height:1.5;display:flex;gap:6px;align-items:flex-start">
+                    <i data-lucide="info" width="12" height="12" style="flex-shrink:0;margin-top:1px"></i>비밀번호 분실 시 '본인 인증' 후 영웅문S# 앱에서 직접 초기화할 수 있습니다.
+                  </div>
+                </div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-outline"><i data-lucide="phone" width="14" height="14"></i>상담사</button>
+                <button class="ms-btn-primary"><i data-lucide="message-circle" width="14" height="14"></i>챗봇</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-02</strong>ID/PW 탭</div>
+          </div>
+
+          <!-- WF-03: 본인 인증 선택 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <button class="ms-back-btn">‹</button>
+                  <div class="ms-header-center"><div class="ms-header-title">본인 인증</div></div>
+                  <div style="width:30px"></div>
+                </div>
+              </div>
+              <div class="ms-body">
+                <div style="padding:20px 18px 8px;font-size:15px;font-weight:700;color:#111">인증 수단을 선택해주세요</div>
+                <div style="padding:0 18px 14px;font-size:13px;color:#6B7280">ID조회/PW초기화를 위한 본인확인이 필요합니다</div>
+                <div class="ms-auth-list">
+                  <div class="ms-auth-card sel">
+                    <div class="ms-badge-rec">권장</div>
+                    <div class="ms-auth-icon"><i data-lucide="smartphone" width="22" height="22" color="#003087"></i></div>
+                    <div><div class="ms-auth-main">휴대폰 인증</div><div class="ms-auth-sub">등록 번호로 OTP 발송</div></div>
+                  </div>
+                  <div class="ms-auth-card">
+                    <div class="ms-auth-icon"><i data-lucide="landmark" width="22" height="22" color="#003087"></i></div>
+                    <div><div class="ms-auth-main">계좌 인증</div><div class="ms-auth-sub">계좌번호 + 비밀번호</div></div>
+                  </div>
+                  <div class="ms-auth-card">
+                    <div class="ms-auth-icon"><i data-lucide="badge-check" width="22" height="22" color="#003087"></i></div>
+                    <div><div class="ms-auth-main">간편 인증</div><div class="ms-auth-sub">카카오 · PASS · KB</div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-primary" style="flex:1">다음</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-03</strong>본인 인증 선택</div>
+          </div>
+
+          <!-- WF-04: 휴대폰 OTP 인증 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <button class="ms-back-btn">‹</button>
+                  <div class="ms-header-center"><div class="ms-header-title">휴대폰 인증</div></div>
+                  <div style="width:30px"></div>
+                </div>
+              </div>
+              <div class="ms-body">
+                <div class="ms-spacer"></div>
+                <div class="ms-field">
+                  <div class="ms-field-label">등록 휴대폰 번호</div>
+                  <div class="ms-field-val">010-****-1234</div>
+                </div>
+                <div style="padding:0 18px 16px">
+                  <button style="width:100%;height:44px;background:#003087;border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">인증번호 발송</button>
+                </div>
+                <div style="padding:0 18px 10px;font-size:13px;color:#6B7280;text-align:center">인증번호 6자리를 입력해주세요</div>
+                <div class="ms-otp-row">
+                  <div class="ms-otp-box filled">1</div>
+                  <div class="ms-otp-box filled">2</div>
+                  <div class="ms-otp-box filled">3</div>
+                  <div class="ms-otp-box active"></div>
+                  <div class="ms-otp-box"></div>
+                  <div class="ms-otp-box"></div>
+                </div>
+                <div class="ms-timer">남은 시간 2:47</div>
+                <div style="padding:4px 18px;font-size:11px;color:#9CA3AF;text-align:center">인증번호가 오지 않으면 재발송을 눌러주세요</div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-outline">재발송</button>
+                <button class="ms-btn-primary">확인</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-04</strong>휴대폰 OTP 인증</div>
+          </div>
+
+          <!-- WF-05: 처리 완료 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <div class="ms-header-logo"><div class="ms-logo-k">K</div><span class="ms-logo-name">키움 디지털ARS</span></div>
+                  <button class="ms-close-btn">✕</button>
+                </div>
+              </div>
+              <div class="ms-body">
+                <div class="ms-success-area">
+                  <div class="ms-check-circle"><i data-lucide="check" width="34" height="34" color="#16A34A" stroke-width="2.5"></i></div>
+                  <div class="ms-success-title">비밀번호가<br>초기화되었습니다</div>
+                  <div class="ms-success-sub">영웅문S# 앱에서 새 비밀번호를<br>설정해주세요</div>
+                </div>
+                <div class="ms-info-card">
+                  <div class="ms-info-row"><span class="ms-info-key">처리 유형</span><span class="ms-info-val">비밀번호 초기화</span></div>
+                  <div class="ms-info-row"><span class="ms-info-key">처리 일시</span><span class="ms-info-val">2026.08.18 09:41</span></div>
+                  <div class="ms-info-row"><span class="ms-info-key">처리 결과</span><span class="ms-info-val" style="color:#16A34A">처리 완료</span></div>
+                </div>
+                <div class="ms-spacer"></div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-outline">메인으로</button>
+                <button class="ms-btn-primary">앱으로 이동</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-05</strong>처리 완료</div>
+          </div>
+
+          <!-- WF-06: 서류 제출 초기 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <button class="ms-back-btn">‹</button>
+                  <div class="ms-header-center"><div class="ms-header-title">서류 제출</div></div>
+                  <div style="width:30px"></div>
+                </div>
+              </div>
+              <div class="ms-progress-steps">
+                <div class="ms-step active"><div class="ms-step-num">1</div><div class="ms-step-label">서류 선택</div></div>
+                <div class="ms-step-line"></div>
+                <div class="ms-step"><div class="ms-step-num">2</div><div class="ms-step-label">파일 첨부</div></div>
+                <div class="ms-step-line"></div>
+                <div class="ms-step"><div class="ms-step-num">3</div><div class="ms-step-label">제출 완료</div></div>
+              </div>
+              <div class="ms-body">
+                <div style="padding:14px 18px 8px;font-size:13px;font-weight:700;color:#111">제출할 서류 종류를 선택해주세요</div>
+                <div class="ms-radio-list">
+                  <div class="ms-radio-item sel">
+                    <div class="ms-radio-dot"></div>
+                    <div><div class="ms-radio-text">ISA 가입 서류</div><div class="ms-radio-sub">개인종합자산관리계좌</div></div>
+                  </div>
+                  <div class="ms-radio-item">
+                    <div class="ms-radio-dot"></div>
+                    <div><div class="ms-radio-text">비대면 계좌개설 서류</div><div class="ms-radio-sub">신분증 사본 등</div></div>
+                  </div>
+                  <div class="ms-radio-item">
+                    <div class="ms-radio-dot"></div>
+                    <div><div class="ms-radio-text">접수 보완 서류</div><div class="ms-radio-sub">담당자 요청 서류</div></div>
+                  </div>
+                </div>
+                <div class="ms-spacer"></div>
+                <div class="ms-doc-note"><i data-lucide="triangle-alert" width="12" height="12"></i> 제출 가능 파일: JPG, PNG, PDF (최대 10MB/건)</div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-primary" style="flex:1">다음</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-06</strong>서류 제출 초기</div>
+          </div>
+
+          <!-- WF-07: 서류 첨부 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <button class="ms-back-btn">‹</button>
+                  <div class="ms-header-center"><div class="ms-header-title">서류 첨부</div></div>
+                  <div style="width:30px"></div>
+                </div>
+              </div>
+              <div class="ms-progress-steps">
+                <div class="ms-step done"><div class="ms-step-num" style="font-size:12px">✓</div><div class="ms-step-label">서류 선택</div></div>
+                <div class="ms-step-line" style="background:#22C55E"></div>
+                <div class="ms-step active"><div class="ms-step-num">2</div><div class="ms-step-label">파일 첨부</div></div>
+                <div class="ms-step-line"></div>
+                <div class="ms-step"><div class="ms-step-num">3</div><div class="ms-step-label">제출 완료</div></div>
+              </div>
+              <div class="ms-body">
+                <div class="ms-upload-btns">
+                  <div class="ms-upload-btn"><i data-lucide="camera" width="22" height="22" color="#9CA3AF"></i>카메라 촬영</div>
+                  <div class="ms-upload-btn"><i data-lucide="image" width="22" height="22" color="#9CA3AF"></i>갤러리 선택</div>
+                </div>
+                <div style="padding:0 14px 6px;font-size:11px;color:#9CA3AF;font-weight:600">첨부 파일 (1/3)</div>
+                <div class="ms-file-item">
+                  <div class="ms-file-icon"><i data-lucide="file-text" width="22" height="22" color="#003087"></i></div>
+                  <div class="ms-file-info">
+                    <div class="ms-file-name">ISA신청서_20260818.jpg</div>
+                    <div class="ms-file-size">2.4 MB · 업로드 완료</div>
+                  </div>
+                  <div class="ms-file-ok">✓</div>
+                </div>
+                <div style="padding:0 14px;margin-bottom:8px">
+                  <div style="height:4px;background:#E5E7EB;border-radius:4px"><div style="width:33%;height:100%;background:#003087;border-radius:4px"></div></div>
+                </div>
+                <div class="ms-doc-note"><i data-lucide="shield" width="12" height="12"></i> 악성코드 검사 후 최종 제출됩니다</div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-outline">취소</button>
+                <button class="ms-btn-primary">제출하기</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-07</strong>서류 첨부</div>
+          </div>
+
+          <!-- WF-08: 서류 제출 완료 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <div class="ms-header-logo"><div class="ms-logo-k">K</div><span class="ms-logo-name">키움 디지털ARS</span></div>
+                  <button class="ms-close-btn">✕</button>
+                </div>
+              </div>
+              <div class="ms-body">
+                <div class="ms-success-area">
+                  <div class="ms-check-circle" style="background:#E8EEFA"><i data-lucide="upload" width="32" height="32" color="#003087" stroke-width="2"></i></div>
+                  <div class="ms-success-title">서류 제출이<br>완료되었습니다</div>
+                  <div class="ms-success-sub">담당자 확인 후 처리 결과를<br>카카오 알림톡으로 안내드립니다</div>
+                </div>
+                <div class="ms-info-card">
+                  <div class="ms-info-row"><span class="ms-info-key">서류 종류</span><span class="ms-info-val">ISA 가입 서류</span></div>
+                  <div class="ms-info-row"><span class="ms-info-key">제출 파일</span><span class="ms-info-val">1건</span></div>
+                  <div class="ms-info-row"><span class="ms-info-key">제출 일시</span><span class="ms-info-val">2026.08.18 09:41</span></div>
+                  <div class="ms-info-row"><span class="ms-info-key">처리 상태</span><span class="ms-info-val" style="color:#D97706">검토 중</span></div>
+                </div>
+                <div class="ms-spacer"></div>
+              </div>
+              <div class="ms-bottom">
+                <button class="ms-btn-primary" style="flex:1">메인으로</button>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-08</strong>서류 제출 완료</div>
+          </div>
+
+          <!-- WF-09: 상담사 연결 -->
+          <div class="mockup-item">
+            <div class="phone-wrap"><div class="phone-outer"><div class="phone-screen">
+              <div class="ms-header">
+                <div class="ms-status"><span class="ms-time">9:41</span><div class="ms-island"></div><div class="ms-sb-r"><svg viewBox="0 0 44 12" width="44" height="12" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="7" width="3" height="5" rx="1" opacity=".4"/><rect x="4.5" y="5" width="3" height="7" rx="1" opacity=".65"/><rect x="9" y="3" width="3" height="9" rx="1"/><circle cx="20.5" cy="10.5" r="1.2"/><path d="M17 7.5q3.5-3.5 7 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".65"/><path d="M18.5 9.2q2-1.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/><rect x="28" y="1.5" width="16" height="9" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="44" y="3.5" width="2" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="29.5" y="3" width="11" height="6" rx="1"/></svg></div></div>
+                <div class="ms-header-row">
+                  <button class="ms-back-btn">‹</button>
+                  <div class="ms-header-center"><div class="ms-header-title">상담사 연결</div></div>
+                  <div style="width:30px"></div>
+                </div>
+              </div>
+              <div class="ms-body">
+                <div class="ms-context-card">
+                  <div class="ms-context-title">현재 선택한 서비스</div>
+                  <div class="ms-context-val"><i data-lucide="clipboard-list" width="14" height="14" style="vertical-align:-2px"></i> ISA 가입 서류 제출</div>
+                </div>
+                <div class="ms-context-card" style="margin-top:10px">
+                  <div class="ms-context-title">인증 상태</div>
+                  <div class="ms-context-val" style="color:#16A34A"><i data-lucide="check-circle" width="14" height="14" color="#16A34A" style="vertical-align:-2px"></i> 휴대폰 인증 완료</div>
+                </div>
+                <div style="padding:14px 14px 6px;font-size:12px;color:#6B7280;text-align:center">상담사 연결 시 인증 정보가 자동으로 전달됩니다</div>
+                <div style="text-align:center;padding:4px 0">
+                  <div class="ms-wait-badge"><i data-lucide="clock-3" width="13" height="13"></i>예상 대기 약 3분</div>
+                </div>
+                <div class="ms-spacer"></div>
+                <div style="padding:0 14px">
+                  <button style="width:100%;height:52px;background:#003087;border:none;border-radius:13px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px"><i data-lucide="phone" width="16" height="16"></i>상담사 연결하기</button>
+                </div>
+                <div style="padding:10px 14px 0">
+                  <button style="width:100%;height:46px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;color:#374151;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px"><i data-lucide="message-circle" width="16" height="16"></i>챗봇으로 해결하기</button>
+                </div>
+              </div>
+            </div></div></div>
+            <div class="mockup-label"><strong>WF-09</strong>상담사 연결</div>
+          </div>
+
+        </div><!-- /mockup-grid -->
+
+        <!-- ── PC Admin 화면 WF-10, WF-11 ── -->
+        <div class="mockup-divider">🖥️ 관리자 화면 · PC Web</div>
+        <div class="mockup-grid mockup-pc-grid">
+
+          <!-- WF-10: Admin 메뉴 관리 -->
+          <div class="mockup-item">
+            <div class="browser-wrap"><div class="browser-outer">
+              <div class="browser-bar">
+              <div class="browser-dot" style="background:var(--red)"></div>
+                <div class="browser-dot" style="background:#FFBD2E"></div>
+                <div class="browser-dot" style="background:#28CA41"></div>
+                <div class="browser-url">🔒 admin.kiwoom-ars.com/menu</div>
+              </div>
+              <div class="browser-content">
+                <div class="admin-header">
+                  <div class="admin-logo">키움 디지털Admin</div>
+                  <div class="admin-user">관리자 김운영 · 로그아웃</div>
+                </div>
+                <div class="admin-body">
+                  <div class="admin-sidebar">
+                    <div class="admin-menu-item sel"><i data-lucide="layout-list" width="13" height="13"></i>메뉴 관리</div>
+                    <div class="admin-menu-item"><i data-lucide="bar-chart-2" width="13" height="13"></i>통계/여정</div>
+                    <div class="admin-menu-item"><i data-lucide="bell" width="13" height="13"></i>알림 관리</div>
+                    <div class="admin-menu-item"><i data-lucide="users" width="13" height="13"></i>권한 설정</div>
+                    <div class="admin-menu-item"><i data-lucide="scroll-text" width="13" height="13"></i>운영 로그</div>
+                  </div>
+                  <div class="admin-main">
+                    <div class="admin-section-title">메뉴 관리</div>
+                    <div class="admin-toolbar">
+                      <button class="admin-btn admin-btn-primary">+ 메뉴 추가</button>
+                      <button class="admin-btn admin-btn-outline">↑↓ 순서 변경</button>
+                    </div>
+                    <table class="admin-table">
+                      <tr><th>탭명</th><th>순서</th><th>노출</th><th>관리</th></tr>
+                      <tr><td>⭐ 셀프서비스</td><td>1</td><td><span class="admin-tag tag-on">노출</span></td><td><button class="admin-btn admin-btn-outline" style="height:22px;padding:0 8px">수정</button></td></tr>
+                      <tr><td>🖥️ MTS/HTS</td><td>2</td><td><span class="admin-tag tag-on">노출</span></td><td><button class="admin-btn admin-btn-outline" style="height:22px;padding:0 8px">수정</button></td></tr>
+                      <tr><td>🔑 ID/PW</td><td>3</td><td><span class="admin-tag tag-on">노출</span></td><td><button class="admin-btn admin-btn-outline" style="height:22px;padding:0 8px">수정</button></td></tr>
+                      <tr><td>📄 비대면 서비스</td><td>4</td><td><span class="admin-tag tag-off">숨김</span></td><td><button class="admin-btn admin-btn-outline" style="height:22px;padding:0 8px">수정</button></td></tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div></div>
+            <div class="mockup-label"><strong>WF-10</strong>Admin 메뉴 관리 (PC)</div>
+          </div>
+
+          <!-- WF-11: Admin 통계/여정 -->
+          <div class="mockup-item">
+            <div class="browser-wrap"><div class="browser-outer">
+              <div class="browser-bar">
+              <div class="browser-dot" style="background:var(--red)"></div>
+                <div class="browser-dot" style="background:#FFBD2E"></div>
+                <div class="browser-dot" style="background:#28CA41"></div>
+                <div class="browser-url">🔒 admin.kiwoom-ars.com/analytics</div>
+              </div>
+              <div class="browser-content">
+                <div class="admin-header">
+                  <div class="admin-logo">키움 디지털Admin</div>
+                  <div class="admin-user">관리자 김운영 · 로그아웃</div>
+                </div>
+                <div class="admin-body">
+                  <div class="admin-sidebar">
+                    <div class="admin-menu-item"><i data-lucide="layout-list" width="13" height="13"></i>메뉴 관리</div>
+                    <div class="admin-menu-item sel"><i data-lucide="bar-chart-2" width="13" height="13"></i>통계/여정</div>
+                    <div class="admin-menu-item"><i data-lucide="bell" width="13" height="13"></i>알림 관리</div>
+                    <div class="admin-menu-item"><i data-lucide="users" width="13" height="13"></i>권한 설정</div>
+                    <div class="admin-menu-item"><i data-lucide="scroll-text" width="13" height="13"></i>운영 로그</div>
+                  </div>
+                  <div class="admin-main">
+                    <div class="admin-section-title">고객 여정 통계 · 2026.08</div>
+                    <div class="admin-stat-grid">
+                      <div class="admin-stat-card">
+                        <div class="admin-stat-label">일 평균 방문</div>
+                        <div class="admin-stat-val">1,247</div>
+                        <div class="admin-stat-up">▲ 12.4%</div>
+                      </div>
+                      <div class="admin-stat-card">
+                        <div class="admin-stat-label">셀프 완결율</div>
+                        <div class="admin-stat-val">68.2%</div>
+                        <div class="admin-stat-up">▲ 3.1%</div>
+                      </div>
+                      <div class="admin-stat-card">
+                        <div class="admin-stat-label">상담사 전환율</div>
+                        <div class="admin-stat-val">18.5%</div>
+                        <div class="admin-stat-dn">▼ 2.3%</div>
+                      </div>
+                    </div>
+                    <div class="admin-chart-box">
+                      <div class="admin-chart-title">일별 방문자 수 (최근 7일)</div>
+                      <div class="chart-bars">
+                        <div class="chart-bar" style="height:55%"></div>
+                        <div class="chart-bar" style="height:72%"></div>
+                        <div class="chart-bar" style="height:61%"></div>
+                        <div class="chart-bar" style="height:80%"></div>
+                        <div class="chart-bar" style="height:68%"></div>
+                        <div class="chart-bar" style="height:90%"></div>
+                        <div class="chart-bar" style="height:100%"></div>
+                      </div>
+                      <div class="chart-labels">
+                        <div class="chart-label">12일</div><div class="chart-label">13일</div>
+                        <div class="chart-label">14일</div><div class="chart-label">15일</div>
+                        <div class="chart-label">16일</div><div class="chart-label">17일</div>
+                        <div class="chart-label">18일</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div></div>
+            <div class="mockup-label"><strong>WF-11</strong>Admin 통계/여정 (PC)</div>
+          </div>
+
+        </div><!-- /mockup-pc-grid -->
+      </div><!-- /content-wrap -->
+    </div><!-- /wpanel-mockup -->
+  </div>
+  <!-- 벤치마킹 -->
+  <div class="tab-panel" id="panel-benchmark" role="tabpanel">
+    <div class="content-wrap">
+      <div class="intro-card">
+        <h2>벤치마킹</h2>
+        <p>타 금융사 디지털 ARS 화면과 사용자 경험을 비교합니다.</p>
+        <div class="intro-meta">
+          <span><strong>분석 대상</strong> 7개사</span>
+          <span><strong>비교 관점</strong> 8개</span>
+          <span><strong>개선 로드맵</strong> 3단계</span>
+        </div>
+      </div>
+      <div class="benchmark-content" style="display:grid;gap:24px;">
+        <section class="benchmark-summary" aria-labelledby="benchmark-summary-title">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;color:var(--red);">
+            <i data-lucide="scan-search" aria-hidden="true"></i>
+            <h3 id="benchmark-summary-title" style="font-size:18px;">핵심 요약</h3>
+          </div>
+          <div class="benchmark-insight-grid">
+            <article style="padding:18px;border:1px solid var(--border);border-radius:10px;">
+              <span style="font-size:12px;font-weight:700;color:var(--red);">시장 공통 패턴</span>
+              <h4 style="margin:7px 0;font-size:16px;">첫 화면의 우선순위</h4>
+              <p style="font-size:13px;color:var(--text-2);">반복·긴급 업무를 카드 또는 빠른 메뉴로 먼저 제시합니다.</p>
+            </article>
+            <article style="padding:18px;border:1px solid var(--border);border-radius:10px;">
+              <span style="font-size:12px;font-weight:700;color:var(--red);">키움 적용 목표상</span>
+              <h4 style="margin:7px 0;font-size:16px;">끊김 없는 업무 해결</h4>
+              <p style="font-size:13px;color:var(--text-2);">통화 중 빈번 업무를 빠르게 처리하고, 인증·서류·상담 전환의 맥락을 유지합니다. 큰 글씨·단순 모드를 기본 제공해 누구나 다음 행동을 쉽게 선택하게 합니다.</p>
+            </article>
+            <article style="padding:18px;border:1px solid var(--border);border-radius:10px;background:var(--red-muted);">
+              <span style="font-size:12px;font-weight:700;color:var(--red);">핵심 결론</span>
+              <h4 style="margin:7px 0;font-size:16px;">통화 맥락을 짧게 연결</h4>
+              <p style="font-size:13px;color:var(--text-2);">메뉴 탐색에서 ARS 해결·상담 전환까지 현재 상황을 이어 안내합니다.</p>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="benchmark-matrix-title" hidden>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--red);">
+            <i data-lucide="table-properties" aria-hidden="true"></i>
+            <h3 id="benchmark-matrix-title" style="font-size:18px;">7개사 비교 매트릭스</h3>
+          </div>
+          <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;">아래 내용은 제공된 화면 캡처에서 확인되는 요소를 기록한 것입니다. 캡처만으로 확정할 수 없는 내용은 <strong>추정</strong>으로 표시했습니다.</p>
+          <div class="benchmark-matrix-wrap">
+            <table class="benchmark-matrix">
+              <thead>
+                <tr>
+                  <th scope="col">회사</th>
+                  <th scope="col">진입 방식</th>
+                  <th scope="col">정보구조</th>
+                  <th scope="col">개인화</th>
+                  <th scope="col">인증</th>
+                  <th scope="col">셀프처리</th>
+                  <th scope="col">상담 연결</th>
+                  <th scope="col">접근성</th>
+                  <th scope="col">고객 여정</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">KB손해보험</th>
+                  <td>모바일 웹 화면</td>
+                  <td>청구 절차 안내 카드</td>
+                  <td>추정: 미확인</td>
+                  <td>추정: 미확인</td>
+                  <td>보험금 청구 안내</td>
+                  <td>추정: 상담 아이콘</td>
+                  <td>국문·EN·중문 선택</td>
+                  <td>청구 절차를 단계별 안내</td>
+                </tr>
+                <tr>
+                  <th scope="row">DB손해보험</th>
+                  <td>모바일 웹 디지털서비스</td>
+                  <td>긴급·일반 업무 카드</td>
+                  <td>추정: 미확인</td>
+                  <td>추정: 미확인</td>
+                  <td>긴급출동·계약 관리</td>
+                  <td>추정: 미확인</td>
+                  <td>아이콘·짧은 설명</td>
+                  <td>긴급 업무에서 세부 업무로 진입</td>
+                </tr>
+                <tr>
+                  <th scope="row">메리츠화재</th>
+                  <td>통화 중 디지털ARS</td>
+                  <td>3열 업무 타일</td>
+                  <td>추정: 미확인</td>
+                  <td>로그인 없이 일부 이용 안내</td>
+                  <td>계약·증명서·보험금 업무</td>
+                  <td>고객콜센터 버튼</td>
+                  <td>큰 타일·음성ARS 병행</td>
+                  <td>통화 중 업무 선택 후 콜센터 전환</td>
+                </tr>
+                <tr>
+                  <th scope="row">삼성화재</th>
+                  <td>통화 중 디지털ARS</td>
+                  <td>검색+3열 업무 타일</td>
+                  <td>추정: 미확인</td>
+                  <td>추정: 미확인</td>
+                  <td>사고접수·납입·증명서 발급</td>
+                  <td>추정: 미확인</td>
+                  <td>아이콘 타일·명확한 대비</td>
+                  <td>메뉴 검색 또는 업무 타일로 해결</td>
+                </tr>
+                <tr>
+                  <th scope="row">교보생명</th>
+                  <td>통화 중 ARS</td>
+                  <td>빠른홈·추천 메뉴 목록</td>
+                  <td>일반/빠른홈 선택</td>
+                  <td>추정: 미확인</td>
+                  <td>청구·지급내역·대출 업무</td>
+                  <td>상담사원 연결</td>
+                  <td>큰 목록·누르는 ARS</td>
+                  <td>추천 메뉴 후 전체 메뉴·상담으로 이동</td>
+                </tr>
+                <tr>
+                  <th scope="row">우리카드</th>
+                  <td>보이는 ARS</td>
+                  <td>검색+카테고리 탭</td>
+                  <td>마이 메뉴 탭</td>
+                  <td>추정: 미확인</td>
+                  <td>명세서·즉시결제·이용한도</td>
+                  <td>플로팅 상담사 버튼</td>
+                  <td>큰글씨 토글</td>
+                  <td>추천 검색어·앱·음성ARS·상담 병행</td>
+                </tr>
+                <tr>
+                  <th scope="row">현대카드</th>
+                  <td>보이는 ARS</td>
+                  <td>인사+개인 업무 타일</td>
+                  <td>고객명 인사</td>
+                  <td>추정: 미확인</td>
+                  <td>이용내역·한도변경·바로결제</td>
+                  <td>추정: 상담 헤드셋 아이콘</td>
+                  <td>큰 타일·명확한 레이블</td>
+                  <td>개인 업무 선택 후 결제까지 연결</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="benchmark-insight-title">
+          <div class="benchmark-section-heading">
+            <i data-lucide="lightbulb" aria-hidden="true"></i>
+            <h3 id="benchmark-insight-title" class="benchmark-section-title">벤치마킹 인사이트</h3>
+          </div>
+          <div class="benchmark-insight-grid">
+            <article class="benchmark-summary" style="padding:18px;">
+              <h4 class="benchmark-insight-card-title">빈도 중심 홈</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:6px;"><strong>근거 기업</strong> KB손해보험, 메리츠화재<br><strong>관찰</strong> 반복·긴급 업무가 첫 화면의 큰 카드와 빠른 메뉴에 놓입니다.<span class="benchmark-point"><strong>벤치마킹 포인트</strong><br>통화 중 탐색 단계를 줄이는 우선순위가 핵심입니다.</span><strong>키움 적용안</strong> 계좌·주문·인증·상담의 상위 업무를 이용 빈도 기반으로 배치합니다.</p>
+            </article>
+            <article class="benchmark-summary" style="padding:18px;">
+              <h4 class="benchmark-insight-card-title">업무 상태 기반 안내</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:6px;"><strong>근거 기업</strong> DB손해보험, 교보생명<br><strong>관찰</strong> 채널·진행 단계·다음 선택지가 함께 표시됩니다.<span class="benchmark-point"><strong>벤치마킹 포인트</strong><br>현재 상태를 먼저 알려 주면 뒤로 가기 부담이 줄어듭니다.</span><strong>키움 적용안</strong> ARS 단계와 처리 상태를 한 줄로 고정 안내합니다.</p>
+            </article>
+            <article class="benchmark-summary" style="padding:18px;">
+              <h4 class="benchmark-insight-card-title">인증 컨텍스트 유지</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:6px;"><strong>근거 기업</strong> KB손해보험, 삼성화재<br><strong>관찰</strong> 인증 이후에도 업무 선택과 안내 흐름이 끊기지 않습니다.<span class="benchmark-point"><strong>벤치마킹 포인트</strong><br>재인증과 재탐색을 줄여 이탈을 낮춥니다.</span><strong>키움 적용안</strong> 인증 완료 뒤 원래 업무와 입력값을 안전한 세션 범위에서 복원합니다.</p>
+            </article>
+            <article class="benchmark-summary" style="padding:18px;">
+              <h4 class="benchmark-insight-card-title">상담 컨텍스트 전달</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:6px;"><strong>근거 기업</strong> KB손해보험, 우리카드<br><strong>관찰</strong> 업무 선택과 상담 연결이 같은 흐름으로 이어집니다.<span class="benchmark-point"><strong>벤치마킹 포인트</strong><br>고객이 반복 설명하지 않도록 채널 전환 정보를 전달합니다.</span><strong>키움 적용안</strong> 선택 메뉴·인증 상태·오류 이력을 상담사 화면에 전달합니다.</p>
+            </article>
+            <article class="benchmark-summary" style="padding:18px;">
+              <h4 class="benchmark-insight-card-title">서류 제출 상태 추적</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:6px;"><strong>근거 기업</strong> KB손해보험, 교보생명<br><strong>관찰</strong> 청구·제출 단계와 완료 안내가 화면 흐름으로 나타납니다.<span class="benchmark-point"><strong>벤치마킹 포인트</strong><br>제출 뒤 불확실성을 줄이는 상태 피드백이 필요합니다.</span><strong>키움 적용안</strong> 서류별 접수·검토·보완 요청·완료 상태와 다음 행동을 제공합니다.</p>
+            </article>
+            <article class="benchmark-summary" style="padding:18px;">
+              <h4 class="benchmark-insight-card-title">검색·FAQ·챗봇 통합</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:6px;"><strong>근거 기업</strong> 삼성화재, 우리카드<br><strong>관찰</strong> 검색·추천어·챗봇이 모르는 메뉴의 보조 진입점이 됩니다.<span class="benchmark-point"><strong>벤치마킹 포인트</strong><br>같은 의도를 채널별로 끊지 않고 해결해야 합니다.</span><strong>키움 적용안</strong> 자연어 검색 결과에 FAQ, 챗봇, 업무 실행 링크를 함께 제공합니다.</p>
+            </article>
+            <article class="benchmark-summary" style="padding:18px;">
+              <h4 class="benchmark-insight-card-title">큰 글씨·단순 모드</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:6px;"><strong>근거 기업</strong> 우리카드, 현대카드<br><strong>관찰</strong> 큰 글자·큰 버튼·짧은 레이블이 통화 화면에 쓰입니다.<span class="benchmark-point"><strong>벤치마킹 포인트</strong><br>조작 오류를 낮추려면 읽기와 터치의 부담을 함께 낮춰야 합니다.</span><strong>키움 적용안</strong> 큰 글씨와 단순 모드를 기본 제공하고 설정을 다음 화면에도 유지합니다.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="benchmark-roadmap" aria-labelledby="benchmark-roadmap-title" hidden>
+          <div class="benchmark-section-heading">
+            <i data-lucide="map" aria-hidden="true"></i>
+            <h3 id="benchmark-roadmap-title" class="benchmark-section-title">키움 적용 로드맵</h3>
+          </div>
+          <div class="benchmark-roadmap-grid">
+            <article class="benchmark-roadmap-card" style="border-left:4px solid var(--red);background:var(--red-muted);">
+              <div class="benchmark-roadmap-stage">
+                <h4>핵심 적용 과제</h4>
+                <ul class="benchmark-roadmap-items">
+                  <li><strong>빈도 중심 홈</strong>핵심 업무 진입 단축 / 상위 업무 우선순위 검증</li>
+                  <li><strong>상담 컨텍스트 전달</strong>반복 설명 감소 / 상담 시스템 전달 항목 정의</li>
+                  <li><strong>실패 채널 폴백</strong>인증·처리 실패 이탈 감소 / 실패 사유별 상담·FAQ 경로 설계</li>
+                  <li><strong>접근성 기본값</strong>조작 오류 감소 / 큰 터치 영역과 대비 기준 적용</li>
+                  <li><strong>개인화 메뉴</strong>반복 업무 탐색 단축 / 동의·데이터 범위 설계</li>
+                  <li><strong>서류 상태 추적</strong>제출 후 문의 감소 / 접수·검토·보완 상태 연동</li>
+                  <li><strong>통합 검색</strong>메뉴명 기억 부담 완화 / 의도 분류와 FAQ 색인 품질</li>
+                  <li><strong>이어하기</strong>중단 후 재진입 단축 / 보안 세션과 만료 기준</li>
+                </ul>
+              </div>
+            </article>
+            <article class="benchmark-roadmap-card" style="border-left:4px solid #8896AD;background:#F8FAFD;">
+              <div class="benchmark-roadmap-stage">
+                <h4>중장기 검토</h4>
+              <p style="font-size:12px;color:var(--text-2);margin-top:8px;"><strong>AI 업무 추천</strong> — 효과: 다음 행동 탐색 감소 / 구현 고려: 추천 근거와 고객 통제권 제공<br><strong>고객 여정 기반 선제 안내</strong> — 효과: 업무 완료율 향상 / 구현 고려: 여정 신호와 운영 시나리오 관리<br><strong>멀티모달 AICC</strong> — 효과: 채널 간 맥락 유지 / 구현 고려: 상담·앱·웹·음성 데이터 연계</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section aria-labelledby="benchmark-gallery-title">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--red);">
+            <i data-lucide="smartphone" aria-hidden="true"></i>
+            <h3 id="benchmark-gallery-title" style="font-size:18px;">회사별 화면 캡처</h3>
+          </div>
+          <p style="font-size:13px;color:var(--text-2);">원본 캡처는 새 창에서 확인할 수 있습니다. 화면별 관찰과 키움 적용안은 분리해 기록했습니다.</p>
+          <div class="benchmark-company-filter" role="group" aria-label="회사별 화면 필터" style="margin:14px 0 18px;">
+            <button type="button" class="benchmark-filter-btn active" data-company="all" aria-pressed="true" onclick="filterBenchmark('all')">전체</button>
+            <button type="button" class="benchmark-filter-btn" data-company="KB손해보험" aria-pressed="false" onclick="filterBenchmark('KB손해보험')">KB손해보험</button>
+            <button type="button" class="benchmark-filter-btn" data-company="DB손해보험" aria-pressed="false" onclick="filterBenchmark('DB손해보험')">DB손해보험</button>
+            <button type="button" class="benchmark-filter-btn" data-company="메리츠화재" aria-pressed="false" onclick="filterBenchmark('메리츠화재')">메리츠화재</button>
+            <button type="button" class="benchmark-filter-btn" data-company="삼성화재" aria-pressed="false" onclick="filterBenchmark('삼성화재')">삼성화재</button>
+            <button type="button" class="benchmark-filter-btn" data-company="교보생명" aria-pressed="false" onclick="filterBenchmark('교보생명')">교보생명</button>
+            <button type="button" class="benchmark-filter-btn" data-company="우리카드" aria-pressed="false" onclick="filterBenchmark('우리카드')">우리카드</button>
+            <button type="button" class="benchmark-filter-btn" data-company="현대카드" aria-pressed="false" onclick="filterBenchmark('현대카드')">현대카드</button>
+          </div>
+
+          <section class="benchmark-company-section" data-company="KB손해보험" aria-labelledby="kb-gallery-title">
+            <h4 class="benchmark-company-heading" id="kb-gallery-title"><i data-lucide="building-2" aria-hidden="true"></i>KB손해보험</h4>
+            <div class="benchmark-gallery">
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="KB손해보험/photo_1786513054.png" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="KB손해보험/photo_1786513054.png" alt="KB손해보험 디지털 ARS 첫 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>KB손해보험<br>photo_1786513054.png</div></div><figcaption class="benchmark-shot-meta"><span>첫 화면</span><a class="benchmark-original-link" href="KB손해보험/photo_1786513054.png" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="KB손해보험/photo_1786513065.png" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="KB손해보험/photo_1786513065.png" alt="KB손해보험 디지털 ARS 서비스 선택 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>KB손해보험<br>photo_1786513065.png</div></div><figcaption class="benchmark-shot-meta"><span>서비스 선택</span><a class="benchmark-original-link" href="KB손해보험/photo_1786513065.png" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="KB손해보험/photo_1786513081.png" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="KB손해보험/photo_1786513081.png" alt="KB손해보험 디지털 ARS 상담 연결 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>KB손해보험<br>photo_1786513081.png</div></div><figcaption class="benchmark-shot-meta"><span>상담 연결</span><a class="benchmark-original-link" href="KB손해보험/photo_1786513081.png" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+            </div>
+            <p class="benchmark-company-analysis"><strong>관찰</strong> 첫 화면에서 주요 진입점을 짧은 레이블과 큰 터치 영역으로 구분합니다.<br><strong>벤치마킹 포인트</strong> 홈·업무 선택·상담 연결의 화면 역할을 분명히 해 다음 행동을 예측하게 합니다.<br><strong>키움 적용안</strong> 계좌·주문·인증·상담 등 상위 업무를 큰 버튼으로 제시하고 통화 중에도 같은 탐색 구조를 유지합니다.</p>
+          </section>
+
+          <section class="benchmark-company-section" data-company="DB손해보험" aria-labelledby="db-gallery-title">
+            <h4 class="benchmark-company-heading" id="db-gallery-title"><i data-lucide="building-2" aria-hidden="true"></i>DB손해보험</h4>
+            <div class="benchmark-gallery">
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="DB손해보험/Screenshot_20260812_152331_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="DB손해보험/Screenshot_20260812_152331_Chrome.jpg" alt="DB손해보험 디지털 ARS 첫 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>DB손해보험<br>Screenshot_20260812_152331_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>첫 화면</span><a class="benchmark-original-link" href="DB손해보험/Screenshot_20260812_152331_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="DB손해보험/Screenshot_20260812_152408_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="DB손해보험/Screenshot_20260812_152408_Chrome.jpg" alt="DB손해보험 디지털 ARS 카테고리 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>DB손해보험<br>Screenshot_20260812_152408_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>카테고리</span><a class="benchmark-original-link" href="DB손해보험/Screenshot_20260812_152408_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="DB손해보험/Screenshot_20260812_152559_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="DB손해보험/Screenshot_20260812_152559_Chrome.jpg" alt="DB손해보험 디지털 ARS 안내 완료 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>DB손해보험<br>Screenshot_20260812_152559_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>안내 완료</span><a class="benchmark-original-link" href="DB손해보험/Screenshot_20260812_152559_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+            </div>
+            <p class="benchmark-company-analysis"><strong>관찰</strong> 화면 상단의 채널·상태 표기와 목록형 선택지가 함께 배치됩니다.<br><strong>벤치마킹 포인트</strong> 현재 위치와 선택 가능한 다음 단계를 동시에 보여 주어 뒤로 가기 부담을 줄입니다.<br><strong>키움 적용안</strong> 디지털 ARS 상단에 현재 단계와 상담 전환 상태를 고정하고, 하단에는 계좌·거래 관련 선택지를 단계별로 제시합니다.</p>
+          </section>
+
+          <section class="benchmark-company-section" data-company="메리츠화재" aria-labelledby="meritz-gallery-title">
+            <h4 class="benchmark-company-heading" id="meritz-gallery-title"><i data-lucide="building-2" aria-hidden="true"></i>메리츠화재</h4>
+            <div class="benchmark-gallery">
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="메리츠화재/photo_1786511461.png" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="메리츠화재/photo_1786511461.png" alt="메리츠화재 디지털 ARS 첫 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>메리츠화재<br>photo_1786511461.png</div></div><figcaption class="benchmark-shot-meta"><span>첫 화면</span><a class="benchmark-original-link" href="메리츠화재/photo_1786511461.png" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="메리츠화재/photo_1786511465.png" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="메리츠화재/photo_1786511465.png" alt="메리츠화재 디지털 ARS 서비스 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>메리츠화재<br>photo_1786511465.png</div></div><figcaption class="benchmark-shot-meta"><span>서비스 선택</span><a class="benchmark-original-link" href="메리츠화재/photo_1786511465.png" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="메리츠화재/photo_1786511469.png" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="메리츠화재/photo_1786511469.png" alt="메리츠화재 디지털 ARS 안내 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>메리츠화재<br>photo_1786511469.png</div></div><figcaption class="benchmark-shot-meta"><span>안내 화면</span><a class="benchmark-original-link" href="메리츠화재/photo_1786511469.png" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+            </div>
+            <p class="benchmark-company-analysis"><strong>관찰</strong> 우선 업무와 보조 안내를 시각적 위계로 나누고 짧은 안내 문구를 반복합니다.<br><strong>벤치마킹 포인트</strong> 첫 선택을 좁혀 주되, 도움이 필요한 사용자를 위한 보조 경로를 남깁니다.<br><strong>키움 적용안</strong> 통화 맥락에서 자주 쓰는 증권 업무를 우선 배치하고, 메뉴 검색·FAQ·상담 전환을 보조 경로로 연결합니다.</p>
+          </section>
+
+          <section class="benchmark-company-section" data-company="삼성화재" aria-labelledby="samsung-gallery-title">
+            <h4 class="benchmark-company-heading" id="samsung-gallery-title"><i data-lucide="building-2" aria-hidden="true"></i>삼성화재</h4>
+            <div class="benchmark-gallery">
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="삼성화재/Screenshot_20260812_153224_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="삼성화재/Screenshot_20260812_153224_Chrome.jpg" alt="삼성화재 디지털 ARS 첫 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>삼성화재<br>Screenshot_20260812_153224_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>첫 화면</span><a class="benchmark-original-link" href="삼성화재/Screenshot_20260812_153224_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="삼성화재/Screenshot_20260812_153338_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="삼성화재/Screenshot_20260812_153338_Chrome.jpg" alt="삼성화재 디지털 ARS 카테고리 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>삼성화재<br>Screenshot_20260812_153338_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>카테고리</span><a class="benchmark-original-link" href="삼성화재/Screenshot_20260812_153338_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="삼성화재/Screenshot_20260812_153814_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="삼성화재/Screenshot_20260812_153814_Chrome.jpg" alt="삼성화재 디지털 ARS 상담 안내 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>삼성화재<br>Screenshot_20260812_153814_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>상담 안내</span><a class="benchmark-original-link" href="삼성화재/Screenshot_20260812_153814_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+            </div>
+            <p class="benchmark-company-analysis"><strong>관찰</strong> 아이콘·레이블·여백을 일관되게 써서 메뉴 그룹의 경계를 빠르게 인지하게 합니다.<br><strong>벤치마킹 포인트</strong> 통화 중에도 스캔하기 쉬운 정보 밀도와 반복 가능한 조작 패턴을 만듭니다.<br><strong>키움 적용안</strong> 주문·잔고·인증·상담의 메뉴 카드에 동일한 아이콘, 한 줄 설명, 충분한 터치 영역을 적용합니다.</p>
+          </section>
+
+          <section class="benchmark-company-section" data-company="교보생명" aria-labelledby="kyobo-gallery-title">
+            <h4 class="benchmark-company-heading" id="kyobo-gallery-title"><i data-lucide="building-2" aria-hidden="true"></i>교보생명</h4>
+            <div class="benchmark-gallery">
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="교보생명/Screenshot_20260812_154615_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="교보생명/Screenshot_20260812_154615_Chrome.jpg" alt="교보생명 디지털 ARS 첫 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>교보생명<br>Screenshot_20260812_154615_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>첫 화면</span><a class="benchmark-original-link" href="교보생명/Screenshot_20260812_154615_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="교보생명/Screenshot_20260812_154649_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="교보생명/Screenshot_20260812_154649_Chrome.jpg" alt="교보생명 디지털 ARS 서비스 선택 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>교보생명<br>Screenshot_20260812_154649_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>서비스 선택</span><a class="benchmark-original-link" href="교보생명/Screenshot_20260812_154649_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="교보생명/Screenshot_20260812_154757_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="교보생명/Screenshot_20260812_154757_Chrome.jpg" alt="교보생명 디지털 ARS 안내 완료 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>교보생명<br>Screenshot_20260812_154757_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>안내 완료</span><a class="benchmark-original-link" href="교보생명/Screenshot_20260812_154757_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+            </div>
+            <p class="benchmark-company-analysis"><strong>관찰</strong> 인사·안내·선택지가 한 화면의 흐름으로 이어져 사용자의 현재 맥락을 설명합니다.<br><strong>벤치마킹 포인트</strong> 정보 제공과 행동 유도를 한 화면에 과밀하지 않게 배치합니다.<br><strong>키움 적용안</strong> 로그인 여부와 통화 단계에 맞춰 한 줄 상태 안내를 제공하고, 바로 실행할 수 있는 증권 업무를 아래에 배치합니다.</p>
+          </section>
+
+          <section class="benchmark-company-section" data-company="우리카드" aria-labelledby="woori-gallery-title">
+            <h4 class="benchmark-company-heading" id="woori-gallery-title"><i data-lucide="building-2" aria-hidden="true"></i>우리카드</h4>
+            <div class="benchmark-gallery">
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="우리카드/Screenshot_20260812_081534_Call.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="우리카드/Screenshot_20260812_081534_Call.jpg" alt="우리카드 디지털 ARS 첫 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>우리카드<br>Screenshot_20260812_081534_Call.jpg</div></div><figcaption class="benchmark-shot-meta"><span>첫 화면</span><a class="benchmark-original-link" href="우리카드/Screenshot_20260812_081534_Call.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="우리카드/Screenshot_20260812_081603_Call.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="우리카드/Screenshot_20260812_081603_Call.jpg" alt="우리카드 디지털 ARS 업무 선택 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>우리카드<br>Screenshot_20260812_081603_Call.jpg</div></div><figcaption class="benchmark-shot-meta"><span>업무 선택</span><a class="benchmark-original-link" href="우리카드/Screenshot_20260812_081603_Call.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="우리카드/Screenshot_20260812_081632_Call.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="우리카드/Screenshot_20260812_081632_Call.jpg" alt="우리카드 디지털 ARS 안내 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>우리카드<br>Screenshot_20260812_081632_Call.jpg</div></div><figcaption class="benchmark-shot-meta"><span>안내 화면</span><a class="benchmark-original-link" href="우리카드/Screenshot_20260812_081632_Call.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+            </div>
+            <p class="benchmark-company-analysis"><strong>관찰</strong> 통화 상태를 보이는 화면 안에서 큰 번호·짧은 업무명으로 선택을 유도합니다.<br><strong>벤치마킹 포인트</strong> 음성 안내와 화면 조작이 같은 순서로 읽히도록 만들어 이중 채널의 혼선을 낮춥니다.<br><strong>키움 적용안</strong> ARS 음성 번호와 화면의 메뉴 순서를 일치시키고, 누른 메뉴와 다음 단계가 보이도록 피드백을 제공합니다.</p>
+          </section>
+
+          <section class="benchmark-company-section" data-company="현대카드" aria-labelledby="hyundai-gallery-title">
+            <h4 class="benchmark-company-heading" id="hyundai-gallery-title"><i data-lucide="building-2" aria-hidden="true"></i>현대카드</h4>
+            <div class="benchmark-gallery">
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="현대카드/Screenshot_20260811_161239_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="현대카드/Screenshot_20260811_161239_Chrome.jpg" alt="현대카드 디지털 ARS 첫 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>현대카드<br>Screenshot_20260811_161239_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>첫 화면</span><a class="benchmark-original-link" href="현대카드/Screenshot_20260811_161239_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="현대카드/Screenshot_20260811_161322_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="현대카드/Screenshot_20260811_161322_Chrome.jpg" alt="현대카드 디지털 ARS 서비스 선택 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>현대카드<br>Screenshot_20260811_161322_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>서비스 선택</span><a class="benchmark-original-link" href="현대카드/Screenshot_20260811_161322_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+              <figure class="benchmark-shot"><div class="benchmark-phone"><a href="현대카드/Screenshot_20260811_161332_Chrome.jpg" target="_blank" rel="noopener"><img loading="lazy" decoding="async" src="현대카드/Screenshot_20260811_161332_Chrome.jpg" alt="현대카드 디지털 ARS 완료 안내 화면" onerror="handleBenchmarkImageError(this)"></a><div class="benchmark-empty" hidden>현대카드<br>Screenshot_20260811_161332_Chrome.jpg</div></div><figcaption class="benchmark-shot-meta"><span>완료 안내</span><a class="benchmark-original-link" href="현대카드/Screenshot_20260811_161332_Chrome.jpg" target="_blank" rel="noopener">원본 보기</a></figcaption></figure>
+            </div>
+            <p class="benchmark-company-analysis"><strong>관찰</strong> 단순한 카드형 선택과 넉넉한 여백으로 현재 화면의 핵심 행동을 강조합니다.<br><strong>벤치마킹 포인트</strong> 선택지 수를 통제하고 보조 정보의 대비를 낮춰 통화 중 판단 부담을 줄입니다.<br><strong>키움 적용안</strong> 화면별 핵심 행동을 하나로 제한하고, 주문·인증·상담처럼 위험도 높은 업무에는 다음 단계와 유의사항을 간결하게 제시합니다.</p>
+          </section>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- 기능명세서 원본 -->
+<!-- ══════════════════════════════════════════════════ -->
+<script type="text/plain" id="src-spec">
+# 키움증권 디지털ARS 기능명세서
+
+> 프로젝트: 키움증권 디지털ARS 구축
+> 수행사: ECS텔레콤
+> 기간: 2026.08 ~ 2027.03
+> 버전: v0.1 (착수보고 기준)
+
+---
+
+## 1. 서비스 개요
+
+| 항목 | 내용 |
+|------|------|
+| 서비스명 | 키움증권 디지털ARS |
+| 정의 | 귀로 듣는 음성 ARS 대신 스마트폰 화면으로 보고 선택하는 웹 기반 ARS |
+| 접근 방법 | ① 런처(영웅문S#) 자동 팝업 ② 알림톡/SMS 링크 클릭 |
+| 대상 | 1544-9000 전화 인입 키움증권 고객 |
+| 운영 시간 | 24시간 365일 |
+| 오픈 일정 | 보이는ARS: 2026.10 / 디지털ARS: 2027.03 |
+
+---
+
+## 2. 시스템 구성 요약
+
+```
+고객 (스마트폰)
+  ↕ 런처 팝업 / 알림톡 링크
+디지털ARS 웹 (Digital Thru)
+  ↕ REST
+Digital Relay (타시스템 연동)
+  ├── IVR / PBX (콜인프라)
+  ├── 기간계 (계좌·고객 정보)
+  ├── 클로버+ (상담사 CTI)
+  ├── 영웅문S# (앱 전환)
+  ├── 챗봇 (채널 전환)
+  ├── 뿌리오 (알림톡/SMS)
+  └── 파일 악성코드 검사
+Digital Journey (고객 여정 통계)
+Digital Admin (운영 관리자)
+```
+
+---
+
+## 3. 기능 요구사항
+
+### R1. 디지털ARS 진입 및 채널 연결
+
+고객이 1544-9000에 전화 인입 시 IVR과 콜게이트를 통해 디지털ARS 웹 화면으로 연결되는 전 과정.
+
+#### F-01. 런처 보유 고객 자동 팝업
+
+| 항목 | 내용 |
+|------|------|
+| **대상 사용자** | 영웅문S# 런처 설치 고객 |
+| **전제조건** | 고객이 1544-9000 전화 인입, IVR에서 디지털ARS 선택, 콜게이트가 런처 보유 여부 확인 |
+| **트리거** | IVR이 콜게이트에 디지털ARS 실행 요청 전송 |
+| **동작** | 콜게이트 → 런처SDK에 자동 팝업 요청 → 영웅문S# 앱에 디지털ARS 웹뷰 팝업 |
+| **결과** | 고객 스마트폰에 디지털ARS 메인 화면이 10초 이내 자동 표시 |
+| **예외** | 앱 미실행 상태 시 푸시 알림 발송 후 팝업 / 팝업 실패 시 알림톡 링크 발송으로 폴백 |
+| **규칙** | 콜게이트 채널: 현재 9채널(월 약 9만 건), 채널 부족 시 증설 협의 필요 |
+
+#### F-02. 런처 미보유 고객 알림톡/SMS 링크 발송
+
+| 항목 | 내용 |
+|------|------|
+| **대상 사용자** | 영웅문S# 미설치 고객 |
+| **전제조건** | 콜게이트가 런처 미보유로 판별 |
+| **트리거** | 콜게이트가 뿌리오(알림톡 발송 시스템)에 링크 발송 요청 |
+| **동작** | 뿌리오 → 고객 등록 휴대폰 번호로 알림톡(카카오) 발송, 알림톡 실패 시 SMS로 폴백 |
+| **결과** | 고객이 링크 클릭 시 모바일 브라우저에서 디지털ARS 웹 실행 |
+| **예외** | 링크 유효기간 초과 시 만료 안내 화면 표시 / 고객 번호 없는 경우 음성 ARS 유지 |
+| **데이터** | 링크 내 토큰: 고객번호, 콜 세션ID, 만료시간(발송 후 N분) |
+
+> ❓ 미결정: 링크 유효기간 (권고: 30분)
+
+#### F-03. 링크 유효성 검증
+
+| 항목 | 내용 |
+|------|------|
+| **트리거** | 고객이 알림톡/SMS 링크 클릭 |
+| **동작** | Digital Relay가 토큰 서명·만료시간·콜 세션 유효성 검증 |
+| **결과** | 유효 → 디지털ARS 메인 화면 로딩 / 무효 → "링크가 만료되었습니다" 안내 후 고객센터 번호 표시 |
+| **보안** | HTTPS, 토큰 1회 사용 원칙(재진입 가능 여부 협의 필요) |
+
+---
+
+### R2. 셀프서비스 메뉴 및 업무 처리
+
+고객이 디지털ARS 화면에서 시각적 메뉴를 선택해 금융 업무를 직접 처리하는 기능 전체.
+
+#### F-04. 메인 화면 및 탭 네비게이션
+
+| 항목 | 내용 |
+|------|------|
+| **화면 구성** | 상단: 키움증권 CI 로고 / 탭 바 / 본문 |
+| **탭 목록** | 0.셀프서비스 / 1.MTS·HTS / 2.ID·PW·인증서 / 3.비대면업무 / 4.계좌정보·뱅킹 / 5.미수금·신용대출 / 6.사고등록·해지 / 7.주식주문·잔고조회 / 8.서류발급 |
+| **셀프서비스 탭 위치** | 화면 상단 첫 번째 탭(가장 빈도 높은 처리성 업무 배치) |
+| **디자인 기준** | 키움증권 CI 컬러/폰트/아이콘 준수, 반응형 웹, Non-ActiveX |
+| **접근성** | 고령자 대상 큰 글씨·직관적 버튼 UI 제공 |
+
+#### F-05. 셀프서비스 탭 - 처리성 업무
+
+상담 빈도 높은 처리성 업무를 상단에 배치하여 고객이 상담사 연결 없이 완결 처리.
+
+| # | 메뉴명 | 처리 방식 | 인증 |
+|---|--------|-----------|------|
+| 1 | 입출금이 안돼요 | 기간계 연동 현황 확인 후 안내 | 계좌 인증 |
+| 2 | 서류 발급현황 조회 | 기간계 조회 | 계좌 인증 |
+| 3 | ISA 가입서류 제출 | 디지털Form 연계 | 휴대폰 인증 |
+| 4 | 비밀번호 모르겠어요 | 영웅문S# 연동 | 휴대폰 인증 |
+| 5 | 비대면 접수현황 조회 | 기간계 조회 | 계좌 인증 |
+
+> 거래중지계좌·신분증진위확인필요·출금한도제한 케이스는 영웅문S# 연동 처리
+
+#### F-06. MTS/HTS 화면 문의 (FAQ)
+
+| 항목 | 내용 |
+|------|------|
+| **내용** | HTS 화면 문의, MTS 화면 문의 FAQ 제공 |
+| **처리** | 자주 묻는 질문 텍스트·이미지 기반 안내, 해결 불가 시 상담사 연결 |
+| **데이터** | FAQ 콘텐츠는 디지털Admin에서 운영자가 관리 |
+
+#### F-07. ID/PW/인증서 관리
+
+| # | 세부 기능 | 처리 방식 | 연동 |
+|---|-----------|-----------|------|
+| 1 | ID조회/PW초기화 | 본인 인증 후 재설정 | 영웅문S# |
+| 2 | 장기미사용ID 제한 해지 | 본인 인증 후 처리 | 영웅문S# |
+| 3 | 간편인증/공동인증서 안내 | FAQ 형태 안내 | 영웅문S# |
+
+#### F-08. 비대면 업무
+
+| # | 세부 기능 | 처리 방식 |
+|---|-----------|-----------|
+| 1 | 계좌개설 및 1원입금인증 | 조회성 (영웅문S# 연동) |
+| 2 | 증권계좌번호 확인 | 처리성 |
+| 3 | 계좌비밀번호 재설정 | 조회성 |
+| 4 | 출금계좌 등록 | 조회성 |
+| 5 | 한도제한계좌 해제 | 조회성 |
+| 6 | 계좌 폐쇄 | 조회성 |
+
+#### F-09. 계좌정보/뱅킹
+
+| # | 세부 기능 | 처리 방식 |
+|---|-----------|-----------|
+| 1 | 계좌정보 조회 및 변경 | 조회성 (영웅문S# 연동) |
+| 2 | 은행이체 | FAQ (음성ARS 안내) |
+| 3 | 주식대체 | FAQ |
+| 4 | 사고 등록/해지 | 음성ARS·영웅문S# 연동 |
+| 5 | 서류발급 | 처리성 (영웅문S# 연동) |
+
+#### F-10. 미수금 및 신용/대출
+
+| # | 세부 기능 | 처리 방식 |
+|---|-----------|-----------|
+| 1 | 미수 및 반대매매 안내 | FAQ |
+| 2 | 신용/대출 약정 안내 | FAQ |
+| 3 | 신용/대출 신청 및 상환 | 처리성 (영웅문S# 연동) |
+
+#### F-11. 국내주식 주문 및 잔고조회
+
+| # | 세부 기능 | 처리 방식 | 인증 |
+|---|-----------|-----------|------|
+| 1 | 시세 및 시황 | 매체 (영웅문S# 전환) | 불필요 |
+| 2 | 주문 | 매체 (영웅문S# 전환) | ARS주문비번 |
+| 3 | 체결조회 | 조회성 | 계좌 인증 |
+| 4 | 예수금 및 잔고조회 | 조회성 | 계좌 인증 |
+
+#### F-12. 서류발급
+
+| 항목 | 내용 |
+|------|------|
+| **기능** | 거래내역서, 예수금증명서, 세액명세서, 잔고증명서 발급 |
+| **처리** | 처리성 (영웅문S# 연동 또는 디지털ARS 내 처리) |
+| **인증** | 계좌 인증 |
+
+---
+
+### R3. 본인 인증
+
+디지털ARS 내 업무 수행 시 고객 본인 확인을 위한 인증 수단 제공.
+
+#### F-13. 계좌 인증
+
+| 항목 | 내용 |
+|------|------|
+| **입력값** | 계좌번호 + 계좌비밀번호 (보안 키패드 입력) |
+| **용도** | 시세 조회 전용, 계좌 관련 조회 (입출금 관련 불가) |
+| **제약** | 보안 부서 진단상 입출금 관련 인증 수단으로 사용 불가 |
+| **UI** | 보안 키패드 (3rd Party 솔루션, 키움증권 제공) |
+
+#### F-14. 휴대폰 인증
+
+| 항목 | 내용 |
+|------|------|
+| **방식** | 고객 등록 휴대폰 번호로 OTP 문자 발송 후 입력 |
+| **용도** | 본인 인증이 필요한 처리성 업무 전반 |
+| **제약** | 인증 모듈 필요 (별도 연동) |
+| **UI** | 번호 입력 → 인증번호 발송 → 숫자 입력 (보안 키패드) |
+
+#### F-15. 간편 인증
+
+| 항목 | 내용 |
+|------|------|
+| **방식** | 카카오·네이버·PASS 등 사설 인증 |
+| **제약** | 모바일 웹 환경에서 인증 모듈 연동 필요, 상세 협의 필요 |
+| **미지원** | 공동인증서(모바일 웹 불가), OTP(모바일 웹 불가), ARS주문비번(ARS 주문 전용) |
+
+> ❓ 미결정: 인증 수단별 허용 업무 범위 — 보안 부서 협의 후 확정 필요
+
+---
+
+### R4. 디지털Form - 서류 제출
+
+고객이 모바일 웹에서 금융 서류를 촬영·업로드하고 상담사/담당자에게 전달하는 기능.
+기존 MO 서비스(월 2~3백만 원) 대체.
+
+#### F-16. 서류 제출 초기 화면
+
+| 항목 | 내용 |
+|------|------|
+| **진입 경로** | ① 디지털ARS 내 서류 제출 메뉴 ② 상담사가 클로버+에서 링크 알림톡 발송 후 고객 클릭 |
+| **화면 내용** | 제출 대상 서류 종류 안내, 제출 가능 포맷 안내 (JPG/PNG/PDF 등) |
+| **본인 인증** | 서류 제출 전 휴대폰 인증 또는 URL 발송 시 고객번호 사전 확인 |
+
+#### F-17. 서류 촬영/첨부
+
+| 항목 | 내용 |
+|------|------|
+| **입력 방식** | 카메라 직접 촬영 또는 갤러리 선택 (사진함 연동 아닌 카메라 우선) |
+| **지원 포맷** | 고화질 원본 사진, PDF |
+| **첨부 제한** | 파일 크기·개수 제한 (상세 협의 필요) |
+| **기능** | 다중 서류 첨부 지원 |
+
+#### F-18. 악성코드 검사 및 제출 처리
+
+| 항목 | 내용 |
+|------|------|
+| **프로세스** | 파일 업로드 → 격리 공간 임시 저장 → 악성코드 검사 → 화이트리스트 검증 → 정상 확인 후 공유 서버 이동 |
+| **검사 도구** | 파일 악성코드 검사 3rd Party 솔루션 (키움증권 제공) |
+| **실패 처리** | 악성코드 감지 시 파일 삭제 후 고객에게 오류 안내 |
+| **OCR** | 신분증 등 주요 서류 OCR 인식 및 개인정보 마스킹 (상세 협의 필요) |
+| **자동 분류** | 제출 서류 종류에 따라 자동 분류 (기존: 수동 분류) |
+| **고객번호 매핑** | 고객번호·고객명 자동 매핑 (기존 MO: 수동 매핑) |
+
+#### F-19. 제출 결과 확인 및 알림
+
+| 항목 | 내용 |
+|------|------|
+| **고객 알림** | 제출 완료 화면 표시 + 알림톡 발송 ("금융거래목적확인서가 제출되었어요") |
+| **담당자 알림** | 클로버+ 연동을 통해 담당 상담사에게 실시간 알림 |
+| **처리 조회** | 고객이 제출 후 처리 과정 수시 조회 가능 |
+| **추가 요청** | 누락 서류 보완 요청 시 알림톡으로 재발송 안내 |
+
+---
+
+### R5. 클로버+ 상담사 연동
+
+고객이 상담사 연결을 요청하거나 디지털ARS 이용 중 콜이 인입될 때, 클로버+ 상담 어플리케이션에 고객 컨텍스트가 자동 전달되는 기능.
+
+#### F-20. 상담사 연결 요청
+
+| 항목 | 내용 |
+|------|------|
+| **트리거** | 고객이 디지털ARS 화면에서 "상담사 연결" 버튼 클릭 |
+| **동작** | Digital Relay → IVR로 콜 연결 요청 → PBX 라우팅 → 상담사 전화 울림 |
+| **CTI 전달 정보** | 고객 정보, 인증 여부, 최종 선택 메뉴, 계좌 정보 |
+| **클로버+ 팝업** | 상담사 화면에 전화받기 창과 함께 고객 컨텍스트 자동 팝업 |
+
+#### F-21. 디지털ARS 콜 인입 이벤트 처리 (CTI)
+
+| 항목 | 내용 |
+|------|------|
+| **이벤트** | 디지털ARS 이용 중 콜 인입 시 CTI가 UUI/UEI 데이터를 클로버+에 전달 |
+| **전달 데이터** | 서비스 메뉴, 인증 여부, 고객 입력 정보 |
+| **연동 방식** | WebSocket (실시간) + REST |
+| **이력 저장** | 디지털ARS 접촉 이력 통합 이력 DB 저장 |
+
+#### F-22. 서류 제출 링크 발행 및 알림톡 발송
+
+| 항목 | 내용 |
+|------|------|
+| **트리거** | 상담사가 클로버+에서 서류 제출 링크 발행 요청 |
+| **동작** | 클로버+ → Digital Relay → 뿌리오 → 고객 알림톡 발송 |
+| **결과** | 고객이 링크 클릭 → 디지털Form 진입 |
+
+---
+
+### R6. 채널 전환 (영웅문S#·챗봇)
+
+디지털ARS에서 처리 불가 업무이거나 고객이 원할 때 영웅문S# 앱 또는 챗봇으로 인증 컨텍스트를 유지한 채 전환.
+
+#### F-23. 영웅문S# 앱 전환
+
+| 항목 | 내용 |
+|------|------|
+| **방식** | 앱 스킴(App Scheme) 기반 딥링크 전환 |
+| **컨텍스트 공유** | 인증 정보·고객 정보를 전환 시 전달하여 재인증 불필요 |
+| **대상 업무** | 비밀번호 초기화, 주식 주문, 잔고 조회, 계좌 조회 등 영웅문S# 처리 업무 |
+
+#### F-24. 챗봇 전환
+
+| 항목 | 내용 |
+|------|------|
+| **방식** | REST API 기반 챗봇 채널 전환 |
+| **컨텍스트 공유** | 인증 정보 공유로 챗봇에서 재인증 없이 업무 진행 |
+| **대상** | 디지털ARS에서 FAQ 또는 텍스트 기반 상담이 필요한 경우 |
+
+---
+
+### R7. 운영 관리자 기능 (디지털Admin)
+
+운영 관리자가 디지털Admin 웹에서 메뉴·시나리오·사용자·통계를 관리하는 기능.
+
+#### F-25. 메뉴 및 시나리오 관리
+
+| 항목 | 내용 |
+|------|------|
+| **기능** | 디지털ARS 메뉴 구조 추가/수정/삭제, IVR 시나리오 멘트 관리 |
+| **적용 시점** | 변경 저장 시 실서비스 즉시 반영 |
+| **권한** | 관리자 역할별 편집 권한 분리 |
+
+#### F-26. 사용자 및 권한 관리
+
+| 항목 | 내용 |
+|------|------|
+| **기능** | 운영자 계정 생성/수정/삭제, 역할 기반 메뉴 접근 권한 설정 |
+| **로그** | 관리자 활동 이력 기록 |
+
+#### F-27. 고객 여정 통계 조회 (Digital Journey)
+
+| 항목 | 내용 |
+|------|------|
+| **기능** | 메뉴별 진입·이탈·완결 통계, 채널별 접속 현황, 시간대별 트래픽 조회 |
+| **기간 필터** | 일별·주별·월별 조회 |
+| **시각화** | 차트·테이블 형태 제공 |
+| **엔진** | OpenSearch 기반 로그 수집·분석 |
+
+---
+
+### R8. 보이는ARS 임시 서비스 (1차 오픈: 2026.10)
+
+디지털ARS 오픈(2027.03) 전까지 IPCC와 함께 오픈하는 임시 보이는ARS 서비스.
+
+#### F-28. 보이는ARS 핵심 기능
+
+| 항목 | 내용 |
+|------|------|
+| **구현 범위** | 수행사 기본 패키지로 필수 서비스만 구현 (미사용·불필요 기능 제거) |
+| **추가 기능** | 챗봇 메뉴 추가 |
+| **제거 기능** | 콜 유지 및 음성 IVR sync 기능 제거, HTML 태그 오류 수정 |
+| **메뉴** | 금융사기신고, 빠른주식주문, 전화번호안내, ARS주문및시세조회 |
+| **종료 시점** | 신규 디지털ARS 오픈 시 완전 종료 |
+
+---
+
+## 4. 비기능 요구사항
+
+### 4.1 성능
+
+| 항목 | 기준 |
+|------|------|
+| 서비스 가용성 | 99.9% 이상 (24×365) |
+| 런처 팝업 응답 | 10초 이내 |
+| 페이지 로딩 | 3초 이내 |
+| 동시 접속 | 성능 테스트 기준 별도 정의 |
+
+### 4.2 보안
+
+| 항목 | 기준 |
+|------|------|
+| 통신 암호화 | HTTPS (SSL/TLS) |
+| 데이터 암호화 | AES-256 (개인정보), SHA-256 (해시) |
+| 개인정보 마스킹 | 화면 표시 시 주민번호·계좌번호 마스킹 처리 |
+| 보안 키패드 | 비밀번호·인증번호 입력 시 3rd Party 보안 키패드 적용 |
+| 파일 보안 | 서류 업로드 시 악성코드 검사 후 격리 공간 거쳐 저장 |
+| 보안 심의 | 오픈 2주 전 보안성 심의 및 모의해킹 완료 필수 |
+
+### 4.3 호환성
+
+| 항목 | 기준 |
+|------|------|
+| 지원 브라우저 | Chrome, Safari, Samsung Internet (최신 2버전) |
+| 표준 | HTML5, CSS3, JavaScript (Non-ActiveX) |
+| 반응형 | 모바일 웹 기준, 태블릿·PC 호환 |
+
+### 4.4 다중화 (HA)
+
+| 구성요소 | 다중화 방식 |
+|----------|------------|
+| Proxy (DMZ) | L4 2중화 Active-Active |
+| Digital Thru·Relay | L4 3중화 + WAS 세션 클러스터링 |
+| Digital Journey | L4 3중화 + WAS 세션 클러스터링 |
+| Digital Admin | L4 3중화 |
+| MongoDB | Replica Set 3중화 |
+| PostgreSQL | Master-Slave-Slave 3중화 |
+| OpenSearch | Native HA 3중화 |
+
+---
+
+## 5. 미결정 사항 (협의 필요)
+
+| # | 항목 | 관련 부서 | 비고 |
+|---|------|-----------|------|
+| 1 | 인증 수단별 허용 업무 범위 | 보안 부서 | 계좌 인증·휴대폰 인증별 가능 업무 목록 |
+| 2 | 알림톡 링크 유효기간 | CS기획팀 | 권고: 30분 |
+| 3 | 런처 채널 증설 범위 | IT기획팀 / 콜게이트 | 현재 9채널(월 9만 건) 한도 |
+| 4 | OCR·진위확인 연동 범위 | IT기획팀 | 신분증 OCR, 마스킹, 진위 확인 |
+| 5 | 서류 제출 파일 크기·개수 제한 | CS기획팀 | |
+| 6 | 챗봇 전환 후 디지털ARS 복귀 시나리오 | CS기획팀 | |
+| 7 | 콜게이트 개인정보 위수탁 계약 | 법무/준법 | 키움증권 ↔ 콜게이트 계약 |
+</script>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- 유저플로우 원본 -->
+<!-- ══════════════════════════════════════════════════ -->
+<script type="text/plain" id="src-flow">
+# 키움증권 디지털ARS 유저플로우
+
+> 프로젝트: 키움증권 디지털ARS 구축
+> 버전: v0.1 (착수보고 기준)
+
+---
+
+## Flow 1. 런처 보유 고객 - 디지털ARS 진입 및 셀프서비스 완결
+
+```mermaid
+flowchart TD
+    A([고객: 1544-9000 전화]) --> B[PBX 콜 수신]
+    B --> C[IVR 음성 안내]
+    C --> D{고객: 디지털ARS 선택?}
+    D -- No --> E[기존 음성 IVR 서비스 유지]
+    D -- Yes --> F[IVR → 콜게이트에 디지털ARS 실행 요청]
+    F --> G{콜게이트: 런처 보유 확인}
+    G -- 런처 보유 --> H[콜게이트 → 런처SDK 팝업 요청]
+    G -- 런처 미보유 --> Flow2[→ Flow 2로 이동]
+    H --> I{영웅문S# 앱 실행 상태?}
+    I -- 실행 중 --> J[디지털ARS 웹뷰 자동 팝업]
+    I -- 미실행 --> K[푸시 알림 발송]
+    K --> L{고객: 알림 클릭?}
+    L -- Yes --> J
+    L -- No / 타임아웃 --> M[알림톡 링크 폴백 발송]
+    M --> N[고객: 알림톡 링크 클릭]
+    N --> J
+    J --> O[디지털ARS 메인 화면 표시]
+    O --> P[고객: 탭/메뉴 선택]
+    P --> Q{업무 유형}
+    Q -- 인증 불필요 --> R[업무 화면 직접 표시]
+    Q -- 인증 필요 --> S[본인 인증 화면]
+    S --> T{인증 수단 선택}
+    T -- 계좌 인증 --> U[계좌번호 + 비밀번호 입력]
+    T -- 휴대폰 인증 --> V[휴대폰 OTP 발송 및 입력]
+    T -- 간편 인증 --> W[사설인증 앱 연동]
+    U & V & W --> X{인증 성공?}
+    X -- 실패 3회 --> Y[잠금 처리 및 안내]
+    X -- 성공 --> Z[해당 업무 화면]
+    Z --> AA{처리 방식}
+    AA -- 기간계 직접 처리 --> AB[실시간 처리 완료 화면]
+    AA -- 영웅문S# 연동 --> AC[앱 해당 메뉴로 딥링크 전환]
+    AB --> AD{추가 업무?}
+    AC --> AD
+    AD -- Yes --> P
+    AD -- No --> AE[디지털ARS 종료 / 통화 종료]
+```
+
+---
+
+## Flow 2. 런처 미보유 고객 - 알림톡 링크로 진입
+
+```mermaid
+flowchart TD
+    A([콜게이트: 런처 미보유 확인]) --> B[뿌리오에 알림톡 발송 요청]
+    B --> C{카카오 알림톡 발송 가능?}
+    C -- Yes --> D[알림톡 발송: 디지털ARS 링크 포함]
+    C -- No --> E[SMS 문자 링크 발송 폴백]
+    D & E --> F[고객: 메시지 수신]
+    F --> G{고객: 링크 클릭?}
+    G -- No / 타임아웃 --> H[음성 IVR 유지 또는 상담사 연결]
+    G -- Yes --> I[Digital Relay: 링크 토큰 유효성 검증]
+    I --> J{토큰 유효?}
+    J -- 만료 / 위변조 --> K[만료 안내 화면 + 고객센터 번호 표시]
+    J -- 유효 --> L[디지털ARS 메인 화면 로딩]
+    L --> M[Flow 1의 메뉴 선택 단계로 이동]
+```
+
+---
+
+## Flow 3. 비밀번호 초기화 셀프서비스
+
+```mermaid
+flowchart TD
+    A([디지털ARS 메인 화면]) --> B[탭: ID/PW/인증서 선택]
+    B --> C[메뉴: ID조회/PW초기화 선택]
+    C --> D[본인 인증 화면 표시]
+    D --> E[고객: 휴대폰 인증 선택]
+    E --> F[등록 휴대폰 번호로 OTP 발송]
+    F --> G[고객: OTP 입력]
+    G --> H{OTP 검증}
+    H -- 실패 --> I{재시도 횟수}
+    I -- 3회 미만 --> G
+    I -- 3회 초과 --> J[잠금 안내 + 상담사 연결 유도]
+    H -- 성공 --> K[영웅문S# 연동: PW 초기화 화면]
+    K --> L[고객: 새 비밀번호 입력]
+    L --> M[고객: 비밀번호 확인 입력]
+    M --> N{비밀번호 정책 검증}
+    N -- 불충족 --> O[오류 메시지 + 재입력 안내]
+    O --> L
+    N -- 충족 --> P[기간계 비밀번호 변경 처리]
+    P --> Q[처리 완료 화면 표시]
+    Q --> R[고객: 디지털ARS 메인 복귀 또는 종료]
+```
+
+---
+
+## Flow 4. 서류 제출 (디지털Form)
+
+```mermaid
+flowchart TD
+    A([진입 경로 A: 디지털ARS 서류 제출 메뉴]) --> C
+    B([진입 경로 B: 상담사 링크 알림톡 발송]) --> B1[고객: 알림톡 링크 클릭]
+    B1 --> B2[링크 유효성 검증]
+    B2 --> C
+    C[서류 제출 초기 화면] --> D[본인 인증]
+    D --> E{인증 방식}
+    E -- 휴대폰 인증 --> F[OTP 발송 및 입력]
+    E -- URL 발송 고객번호 사전 확인 --> G[인증 생략]
+    F & G --> H[제출 서류 종류 선택]
+    H --> I[서류 첨부 안내 화면]
+    I --> J{첨부 방식}
+    J -- 카메라 촬영 --> K[카메라 앱 실행 및 촬영]
+    J -- 갤러리 선택 --> L[갤러리에서 파일 선택]
+    K & L --> M[파일 업로드 → 격리 공간 임시 저장]
+    M --> N[악성코드 검사 실행]
+    N --> O{검사 결과}
+    O -- 악성코드 감지 --> P[파일 삭제 + 오류 안내]
+    P --> J
+    O -- 정상 --> Q[화이트리스트 검증]
+    Q --> R{검증 통과?}
+    R -- No --> P
+    R -- Yes --> S[공유 서버 최종 업로드]
+    S --> T[고객번호·고객명 자동 매핑]
+    T --> U[서류 자동 분류]
+    U --> V[제출 완료 화면 표시]
+    V --> W[고객에게 알림톡 발송]
+    V --> X[클로버+ 연동: 담당 상담사 실시간 알림]
+    W & X --> Y{추가 서류 필요?}
+    Y -- Yes --> Z[보완 요청 알림톡 발송]
+    Z --> H
+    Y -- No --> AA[서비스 종료]
+```
+
+---
+
+## Flow 5. 상담사 연결 및 CTI 팝업
+
+```mermaid
+flowchart TD
+    A([고객: 디지털ARS 이용 중]) --> B{상담사 연결 요청}
+    B -- 고객이 상담사 버튼 클릭 --> C[Digital Relay → IVR 콜 연결 요청]
+    B -- 자동 인입 콜 발생 --> D[CTI 콜 인입 이벤트]
+    C --> E[IVR → PBX 라우팅]
+    E --> F[상담사 전화 울림]
+    D --> G[CTI → UUI/UEI 데이터 추출]
+    G --> H[클로버+ 전달]
+    F --> I[상담사: 전화받기 버튼 클릭]
+    H --> J[클로버+: 전화받기 창 팝업]
+    I & J --> K[팝업 내용 표시]
+    K --> L[고객 정보 이름·계좌·전화번호]
+    K --> M[디지털ARS 선택 메뉴]
+    K --> N[인증 여부 및 인증 수단]
+    L & M & N --> O[상담사: 중복 확인 없이 즉시 업무 처리]
+    O --> P[통합 이력 DB 저장]
+    P --> Q[통화 종료]
+```
+
+---
+
+## Flow 6. 영웅문S# 채널 전환
+
+```mermaid
+flowchart TD
+    A([디지털ARS: 영웅문S# 처리 필요 업무 선택]) --> B{영웅문S# 설치 여부}
+    B -- 미설치 --> C[설치 안내 화면 + 스토어 링크]
+    B -- 설치됨 --> D[앱 스킴 딥링크 생성]
+    D --> E[인증 컨텍스트 토큰 포함]
+    E --> F[영웅문S# 앱 실행 해당 메뉴 직접 진입]
+    F --> G[고객: 영웅문S# 내 업무 처리]
+    G --> H{디지털ARS 복귀?}
+    H -- Yes --> I[디지털ARS 메인 화면 복귀]
+    H -- No --> J[서비스 종료]
+```
+
+---
+
+## Flow 7. 운영 관리자 - 메뉴 관리
+
+```mermaid
+flowchart TD
+    A([관리자: 디지털Admin 로그인]) --> B[메뉴 관리 화면]
+    B --> C{작업 유형}
+    C -- 메뉴 추가 --> D[메뉴명·연결 업무·표시 순서 입력]
+    C -- 메뉴 수정 --> E[기존 메뉴 선택 후 내용 변경]
+    C -- 메뉴 삭제 --> F[삭제 확인 팝업]
+    D & E & F --> G[저장]
+    G --> H[실서비스 즉시 반영]
+    H --> I[변경 이력 로그 기록]
+```
+
+---
+
+## 주요 시스템 간 연동 흐름 요약
+
+```
+[고객 전화]
+    ↓
+[1544-9000 → PBX → IVR]
+    ↓ 디지털ARS 선택
+[콜게이트 / 런처SDK]
+    ├─ 런처 보유 → 영웅문S# 자동 팝업
+    └─ 런처 미보유 → 뿌리오 → 알림톡/SMS 링크
+                          ↓
+[디지털 Thru (웹 화면)]
+    ↕ REST
+[디지털 Relay (연동 허브)]
+    ├─ 기간계 (계좌·고객 정보)
+    ├─ 클로버+ (CTI, 서류 알림)
+    ├─ 영웅문S# (앱 딥링크)
+    ├─ 챗봇 (채널 전환)
+    └─ 파일 악성코드 검사
+
+[디지털 Journey] ← 고객 여정 통계 수집
+[디지털 Admin]   ← 운영 관리자 설정
+```
+</script>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- 와이어프레임 원본 -->
+<!-- ══════════════════════════════════════════════════ -->
+<script type="text/plain" id="src-wire">
+# 키움증권 디지털ARS 와이어프레임
+
+> 프로젝트: 키움증권 디지털ARS 구축
+> 버전: v0.1 (착수보고 기준)
+> 형식: 텍스트 기반 레이아웃 명세 (실제 디자인 시안은 디자인팀과 별도 협의)
+
+---
+
+## WF-01. 디지털ARS 메인 화면
+
+```
+┌─────────────────────────────────────┐
+│  [키움증권 로고]          [X 닫기]  │  ← 헤더 (키움증권 CI 컬러)
+├─────────────────────────────────────┤
+│  안녕하세요, 홍길동 고객님           │  ← 인입 고객 이름
+├─────────────────────────────────────┤
+│ [셀프] [MTS/HTS] [ID/PW] [비대면]  │  ← 탭 바 (스크롤)
+│ [계좌] [미수/대출] [사고] [주문] [서류] │
+├─────────────────────────────────────┤
+│  ★ 자주 찾는 서비스                  │  ← 셀프서비스 탭 (기본 선택)
+│                                     │
+│  ┌─────────────┐ ┌─────────────┐   │
+│  │ 💳          │ │ 🔑          │   │
+│  │ 입출금 안돼요│ │비밀번호     │   │
+│  │             │ │모르겠어요   │   │
+│  └─────────────┘ └─────────────┘   │
+│                                     │
+│  ┌─────────────┐ ┌─────────────┐   │
+│  │ 📄          │ │ 📋          │   │
+│  │서류 발급    │ │ ISA 가입    │   │
+│  │현황 조회   │ │서류 제출    │   │
+│  └─────────────┘ └─────────────┘   │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │ 📊 비대면 접수현황 조회     │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│  [📞 상담사 연결]  [💬 챗봇]       │  ← 하단 고정 버튼
+└─────────────────────────────────────┘
+
+레이아웃 명세:
+- 화면 크기: 모바일 기준 375px 폭
+- 헤더 높이: 56px, 키움증권 메인 컬러(빨강 #003087 계열)
+- 탭 바: 수평 스크롤, 선택 탭 하단 강조 바
+- 메뉴 카드: 2열 그리드, 카드 높이 80px, 아이콘 + 텍스트
+- 하단 버튼: 고정(sticky), 높이 56px
+```
+
+---
+
+## WF-02. 탭 내 메뉴 목록 화면 (예: ID/PW/인증서 탭)
+
+```
+┌─────────────────────────────────────┐
+│  [키움증권 로고]          [X 닫기]  │
+├─────────────────────────────────────┤
+│ [셀프] [MTS/HTS] [ID/PW] [비대면]  │  ← 선택된 탭 강조
+├─────────────────────────────────────┤
+│  🔑 ID / PW / 인증서                │  ← 탭 타이틀
+├─────────────────────────────────────┤
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │ ID조회 / PW초기화          >│   │  ← 리스트 아이템
+│  │ 영웅문S# 연동               │   │
+│  └─────────────────────────────┘   │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │ 장기미사용 ID 제한 해지    >│   │
+│  │ 영웅문S# 연동               │   │
+│  └─────────────────────────────┘   │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │ 간편인증 / 공동인증서 안내 >│   │
+│  │ FAQ                         │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│  [📞 상담사 연결]  [💬 챗봇]       │
+└─────────────────────────────────────┘
+
+레이아웃 명세:
+- 메뉴 아이템: 풀 폭 리스트, 높이 64px
+- 우측 화살표: 터치 영역 포함
+- 부제(연동 방식): 회색 소문자 텍스트
+- 구분선: 1px #EEEEEE
+```
+
+---
+
+## WF-03. 본인 인증 선택 화면
+
+```
+┌─────────────────────────────────────┐
+│  [뒤로]  본인 인증         [X 닫기] │
+├─────────────────────────────────────┤
+│                                     │
+│  본인 확인이 필요합니다.             │
+│  아래 인증 방법 중 하나를 선택해   │
+│  주세요.                            │
+│                                     │
+├─────────────────────────────────────┤
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │  📱  휴대폰 인증   [권장]  │   │  ← 배지 표시
+│  │  등록된 번호로 인증번호 발송 │   │
+│  └─────────────────────────────┘   │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │  💳  계좌 인증              │   │
+│  │  계좌번호 + 비밀번호 입력   │   │
+│  └─────────────────────────────┘   │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │  🔐  간편 인증              │   │
+│  │  카카오·네이버·PASS         │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│  [📞 상담사 연결]                   │
+└─────────────────────────────────────┘
+
+레이아웃 명세:
+- 인증 카드: 풀 폭, 높이 72px, 좌측 아이콘 + 우측 설명
+- 권장 인증 수단: 상단 배지 "권장" 표시
+- 인증 불가 수단: 회색 처리 + "불가" 안내
+```
+
+---
+
+## WF-04. 휴대폰 인증 화면
+
+```
+┌─────────────────────────────────────┐
+│  [뒤로]  휴대폰 인증       [X 닫기] │
+├─────────────────────────────────────┤
+│                                     │
+│  등록된 휴대폰 번호로               │
+│  인증번호를 발송합니다.              │
+│                                     │
+│  010 - **** - 5678                 │  ← 마스킹된 번호
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │         [인증번호 발송]      │   │  ← 메인 컬러 버튼
+│  └─────────────────────────────┘   │
+│                                     │
+├─ ─ ─ ─ ─ 발송 후 표시 ─ ─ ─ ─ ─ ─┤
+│                                     │
+│  인증번호 6자리를 입력해 주세요.    │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │  [ ] [ ] [ ] [ ] [ ] [ ]   │   │  ← 보안키패드
+│  └─────────────────────────────┘   │
+│                                     │
+│  ⏱ 남은 시간: 04:59               │  ← 타이머
+│                                     │
+│  인증번호를 받지 못하셨나요? [재발송]│
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │         [인증 확인]          │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│  [📞 상담사 연결]                   │
+└─────────────────────────────────────┘
+
+레이아웃 명세:
+- 인증번호 입력: 6칸 분리형 입력, 자동 포커스 이동
+- 보안 키패드: 화면 하단 팝업으로 숫자 입력
+- 타이머: 붉은 색 강조, 만료 시 재발송 버튼 활성화
+- 재발송 제한: N회 (미결정)
+```
+
+---
+
+## WF-05. 셀프서비스 처리 결과 화면 (비밀번호 초기화 완료)
+
+```
+┌─────────────────────────────────────┐
+│  [키움증권 로고]          [X 닫기]  │
+├─────────────────────────────────────┤
+│                                     │
+│              ✅                     │
+│                                     │
+│    비밀번호가 변경되었습니다.        │
+│                                     │
+│  영웅문S# 앱에서 변경된             │
+│  비밀번호로 로그인하세요.           │
+│                                     │
+│  ─────────────────────────         │
+│  처리 시각  2026.08.14 14:32        │
+│  처리 내용  HTS 비밀번호 초기화     │
+│  ─────────────────────────         │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │    [영웅문S# 바로가기]       │   │  ← 딥링크 버튼
+│  └─────────────────────────────┘   │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │       [처음으로 돌아가기]    │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│  [📞 상담사 연결]  [💬 챗봇]       │
+└─────────────────────────────────────┘
+
+레이아웃 명세:
+- 완료 아이콘: 큰 체크 아이콘 (48px), 초록색
+- 처리 정보: 회색 박스 내 텍스트
+- 주요 CTA: 영웅문S# 바로가기 (메인 컬러 버튼)
+- 보조 CTA: 처음으로 돌아가기 (아웃라인 버튼)
+```
+
+---
+
+## WF-06. 서류 제출 초기 화면
+
+```
+┌─────────────────────────────────────┐
+│  [뒤로]  서류 제출         [X 닫기] │
+├─────────────────────────────────────┤
+│                                     │
+│  📎 서류 제출                       │
+│                                     │
+│  제출할 서류를 선택해 주세요.        │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │ ○  금융거래목적확인서        │   │
+│  └─────────────────────────────┘   │
+│  ┌─────────────────────────────┐   │
+│  │ ○  신분증 (주민등록증/여권) │   │
+│  └─────────────────────────────┘   │
+│  ┌─────────────────────────────┐   │
+│  │ ○  ISA 가입 관련 서류       │   │
+│  └─────────────────────────────┘   │
+│  ┌─────────────────────────────┐   │
+│  │ ○  기타 서류                │   │
+│  └─────────────────────────────┘   │
+│                                     │
+│  📌 제출 가능 형식: JPG, PNG, PDF  │
+│  📌 파일당 최대 크기: N MB         │
+│  📌 최대 N개까지 첨부 가능         │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │       [다음: 본인 인증]      │   │
+│  └─────────────────────────────┘   │
+└─────────────────────────────────────┘
+```
+
+---
+
+## WF-07. 서류 첨부 화면
+
+```
+┌─────────────────────────────────────┐
+│  [뒤로]  서류 첨부         [X 닫기] │
+├─────────────────────────────────────┤
+│                                     │
+│  금융거래목적확인서를               │
+│  촬영하거나 첨부해 주세요.          │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │  [📷 카메라로 촬영하기]     │   │  ← 1순위 CTA
+│  └─────────────────────────────┘   │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │  [🖼 갤러리에서 선택하기]   │   │  ← 2순위 CTA
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│  첨부된 서류                        │
+├─────────────────────────────────────┤
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │ 📄 금융거래목적확인서.jpg   │   │
+│  │ 2.3MB              [삭제 X] │   │
+│  └─────────────────────────────┘   │
+│                                     │
+│  + 추가 서류 첨부                   │
+│                                     │
+├─────────────────────────────────────┤
+│  ⏳ 악성코드 검사 중...             │  ← 업로드 시 표시
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │         [제출하기]           │   │  ← 검사 완료 후 활성화
+│  └─────────────────────────────┘   │
+└─────────────────────────────────────┘
+```
+
+---
+
+## WF-08. 서류 제출 완료 화면
+
+```
+┌─────────────────────────────────────┐
+│  [키움증권 로고]          [X 닫기]  │
+├─────────────────────────────────────┤
+│                                     │
+│              ✅                     │
+│                                     │
+│  금융거래목적확인서가               │
+│  제출되었습니다.                    │
+│                                     │
+│  담당자가 서류를 검토한 후          │
+│  알림톡으로 안내해 드립니다.        │
+│                                     │
+│  ─────────────────────────         │
+│  제출 서류  금융거래목적확인서      │
+│  제출 시각  2026.08.14 15:10       │
+│  처리 상태  접수 완료               │
+│  ─────────────────────────         │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │     [처음으로 돌아가기]      │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│  [📞 상담사 연결]                   │
+└─────────────────────────────────────┘
+```
+
+---
+
+## WF-09. 상담사 연결 요청 화면
+
+```
+┌─────────────────────────────────────┐
+│  [뒤로]  상담사 연결       [X 닫기] │
+├─────────────────────────────────────┤
+│                                     │
+│  📞 상담사와 연결합니다.            │
+│                                     │
+│  현재 선택하신 메뉴와 인증 정보가  │
+│  상담사에게 자동으로 전달됩니다.   │
+│                                     │
+│  ─────────────────────────         │
+│  문의 내용  비밀번호 초기화         │
+│  인증 상태  휴대폰 인증 완료        │
+│  ─────────────────────────         │
+│                                     │
+│  ⏱ 예상 대기 시간: 약 3분          │
+│                                     │
+│  ┌─────────────────────────────┐   │
+│  │      [상담사 연결하기]       │   │  ← 메인 CTA
+│  └─────────────────────────────┘   │
+│                                     │
+│  대기 중 이용할 수 있는 서비스:    │
+│  ┌─────────────────────────────┐   │
+│  │  💬 챗봇으로 먼저 해결하기  │   │
+│  └─────────────────────────────┘   │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+---
+
+## WF-10. 디지털Admin - 메뉴 관리 (관리자 PC 웹)
+
+```
+┌──────────────────────────────────────────────────┐
+│  키움증권 디지털ARS Admin   [로그아웃] [관리자]  │
+├──────────┬───────────────────────────────────────┤
+│  사이드   │  메뉴 관리              [+ 새 메뉴]  │
+│          │                                       │
+│  📋 메뉴  │  ┌──────────────────────────────┐   │
+│  관리★   │  │ 탭   │ 메뉴명      │ 유형 │ 상태│   │
+│          │  ├──────────────────────────────┤   │
+│  👥 사용자│  │ 셀프 │ 입출금 안돼요│처리성│ 활성│   │
+│  관리    │  │ 셀프 │ 비밀번호 초기화│처리성│활성│   │
+│          │  │ ID/PW│ PW초기화    │처리성│ 활성│   │
+│  📊 통계  │  │  ... │     ...     │ ... │ ... │   │
+│  조회    │  └──────────────────────────────┘   │
+│          │                                       │
+│  ⚙ 시스템 │  페이지: 1/5  [이전] [1][2][3] [다음]│
+└──────────┴───────────────────────────────────────┘
+
+레이아웃 명세:
+- 사이드바: 220px 고정, 메뉴 아이콘 + 텍스트
+- 콘텐츠 영역: 나머지 폭, 테이블 기반
+- 상단 바: 로고 + 계정 정보 + 로그아웃
+```
+
+---
+
+## WF-11. 디지털Admin - 고객 여정 통계
+
+```
+┌──────────────────────────────────────────────────┐
+│  키움증권 디지털ARS Admin                         │
+├──────────┬───────────────────────────────────────┤
+│  사이드   │  고객 여정 통계                       │
+│          │  기간: [2026.08.01] ~ [2026.08.14] [조회]│
+│  📋 메뉴  │                                       │
+│  관리    │  ┌───────────────────────────────┐   │
+│          │  │ 총 진입   │ 완결 처리  │ 상담 연결│   │
+│  👥 사용자│  │ 12,450건 │  5,892건  │ 6,558건 │   │
+│  관리    │  │          │  (47.3%)  │ (52.7%) │   │
+│          │  └───────────────────────────────┘   │
+│  📊 통계  │                                       │
+│  조회★   │  [메뉴별 선택 빈도]                    │
+│          │  ██████████ 비밀번호 초기화 (2,341)   │
+│  ⚙ 시스템 │  ████████   계좌 조회       (1,892)  │
+│          │  ██████     서류 발급        (1,103)  │
+└──────────┴───────────────────────────────────────┘
+```
+
+---
+
+## 디자인 가이드라인 요약
+
+| 항목 | 기준 |
+|------|------|
+| **기본 색상** | 키움증권 CI 준수 (빨강 계열 포인트 컬러) |
+| **폰트** | 키움증권 표준 폰트 (디자인팀 가이드 준수) |
+| **버튼** | 주요 CTA: 메인 컬러 배경 흰 텍스트 / 보조: 아웃라인 |
+| **아이콘** | 키움증권 표준 아이콘셋 사용 |
+| **그리드** | 모바일 16px 여백, 8px 단위 스페이싱 |
+| **카드** | 4px 모서리 라운드, 1px 회색 테두리 또는 그림자 |
+| **접근성** | 최소 터치 영역 44×44px, 폰트 최소 14px |
+| **반응형** | 모바일 기준 설계, 태블릿/PC 확장 지원 |
+
+---
+
+## 미확정 디자인 요소
+
+| # | 항목 | 비고 |
+|---|------|------|
+| 1 | 정확한 CI 컬러 코드 | 키움증권 디자인팀 가이드 수령 후 반영 |
+| 2 | 표준 아이콘셋 | 키움증권 제공 또는 별도 협의 |
+| 3 | 고령자 접근성 폰트 크기 | 일반/큰 글씨 전환 기능 여부 협의 |
+| 4 | 다크 모드 지원 여부 | 미결정 |
+| 5 | 애니메이션/트랜지션 | 화면 전환 효과 상세 협의 필요 |
+</script>
+
+<script>
+// ── Mermaid 초기화 ──
+const markdownAvailable = typeof window.marked !== 'undefined' && typeof window.marked.parse === 'function';
+const mermaidAvailable = typeof window.mermaid !== 'undefined' && typeof window.mermaid.initialize === 'function';
+
+if (mermaidAvailable) {
+  window.mermaid.initialize({
+    startOnLoad: false,
+    theme: 'default',
+    flowchart: { curve: 'basis', padding: 20 },
+    themeVariables: { primaryColor: '#003087', primaryTextColor: '#fff', primaryBorderColor: '#001F5B', lineColor: '#6c757d' }
+  });
+}
+
+if (markdownAvailable) {
+  const renderer = new window.marked.Renderer();
+  renderer.code = function(code, lang) {
+    if (lang === 'mermaid') return '<div class="mermaid">' + code + '</div>';
+    const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return '<pre><code>' + escaped + '</code></pre>';
+  };
+  window.marked.setOptions({ renderer, gfm: true, breaks: false });
+}
+
+// ── 마크다운 → HTML 변환 후 렌더링 ──
+async function renderDoc(srcId, contentId, loadingId) {
+  const md = document.getElementById(srcId).textContent;
+  const content = document.getElementById(contentId);
+  const loading = document.getElementById(loadingId);
+  if (markdownAvailable) {
+    content.innerHTML = window.marked.parse(md);
+  } else {
+    const fallback = document.createElement('pre');
+    fallback.textContent = md;
+    content.replaceChildren(fallback);
+  }
+  if (loading) loading.style.display = 'none';
+  if (mermaidAvailable && typeof window.mermaid.run === 'function') {
+    try {
+      await window.mermaid.run({ querySelector: '#' + contentId + ' .mermaid' });
+    } catch(e) { console.warn('mermaid:', e); }
+  }
+  if (typeof window.lucide !== 'undefined') window.lucide.createIcons();
+}
+
+// ── 탭 전환 ──
+const rendered = {};
+function switchTab(name) {
+  ['spec','flow','wire','benchmark'].forEach(t => {
+    document.getElementById('panel-' + t).classList.remove('active');
+    document.getElementById('btn-' + t).classList.remove('active');
+    document.getElementById('btn-' + t).setAttribute('aria-selected', 'false');
+  });
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('btn-' + name).classList.add('active');
+  document.getElementById('btn-' + name).setAttribute('aria-selected', 'true');
+
+  if (['spec', 'flow', 'wire'].includes(name) && !rendered[name]) {
+    rendered[name] = true;
+    renderDoc('src-' + name, 'content-' + name, 'loading-' + name);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── 와이어프레임 서브탭 전환 ──
+function switchWireTab(name) {
+  ['spec','mockup'].forEach(t => {
+    document.getElementById('wpanel-' + t).classList.remove('active');
+    document.getElementById('wsub-' + t).classList.remove('active');
+  });
+  document.getElementById('wpanel-' + name).classList.add('active');
+  document.getElementById('wsub-' + name).classList.add('active');
+}
+
+function filterBenchmark(company) {
+  document.querySelectorAll('.benchmark-filter-btn').forEach(btn => {
+    const isActive = btn.dataset.company === company;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
+  });
+  document.querySelectorAll('.benchmark-company-section').forEach(section => {
+    section.hidden = company !== 'all' && section.dataset.company !== company;
+  });
+}
+
+function handleBenchmarkImageError(img) {
+  const fallback = img.closest('.benchmark-shot').querySelector('.benchmark-empty');
+  img.closest('a').hidden = true;
+  fallback.hidden = false;
+}
+
+// ── 스크롤 진행 바 ──
+window.addEventListener('scroll', () => {
+  const el = document.documentElement;
+  const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// ── 최초 렌더링 ──
+window.addEventListener('DOMContentLoaded', () => {
+  rendered['spec'] = true;
+  renderDoc('src-spec', 'content-spec', 'loading-spec');
+  // Lucide 아이콘 초기화 (모든 data-lucide 속성 SVG 변환)
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+});
+</script>
+</body>
+</html>
